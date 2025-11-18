@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Calendar, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
 import type { Cabinet } from '../data/cabinets';
 
+import logo from "../assets/images/logo.png";
+import sig1 from "../assets/images/sig1.png";
+import sig2 from "../assets/images/sig2.png";
+
 interface SorbonneFormProps {
   selectedCabinet: Cabinet;
   selectedDate: string;
@@ -91,7 +95,7 @@ export function SorbonneForm({
       <div className="flex justify-center items-center mb-4 pb-3 border-b">
         <div className="flex flex-col items-center">
           <img
-            src="/logoPng/logo.png"
+           src={logo}
             alt="HYGITEK"
             className="h-24 object-contain mb-1"
           />
@@ -318,7 +322,7 @@ export function SorbonneForm({
           <div className="font-bold mb-2 text-gray-700 text-xs">Identification et VISA Contrôleur:</div>
           <div className="w-full h-28 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
             <img 
-              src="/sig1.png" 
+              src={sig1}
               alt="Signature Contrôleur" 
               className="max-h-full object-contain p-3"
             />
@@ -328,7 +332,7 @@ export function SorbonneForm({
           <div className="font-bold mb-2 text-gray-700 text-xs">Identification et VISA Maintenance:</div>
           <div className="w-full h-28 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
             <img 
-              src="/sig2.png" 
+             src={sig2}
               alt="Signature Maintenance" 
               className="max-h-full object-contain p-3"
             />

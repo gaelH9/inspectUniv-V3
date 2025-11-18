@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Lock, User } from 'lucide-react';
 
+import logo from "../assets/images/logo.png";
+
 interface LoginPageProps {
   onLogin: () => void;
 }
@@ -26,7 +28,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-8">
           <img
-            src="/logoPng/logo.png"
+          src={logo}
             alt="HYGITEK"
             className="h-24 object-contain"
           />
