@@ -14,8 +14,18 @@ import { AddEquipmentForm } from './components/AddEquipmentForm';
 import { loadEquipmentList, saveEquipmentList, exportEquipmentAsCabinetsTS, getStorageStatus } from './utils/storageUtils';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString("fr-FR"));
+  const formattedDate = new Date().toLocaleDateString('fr-FR').slice(0, 8);
+
+  // 🔐 Lecture initiale depuis localStorage (persistance)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('isAuthenticated') === 'true';
+  });
+
+  //const [selectedDate, setSelectedDate] = useState('11/12/24');
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toLocaleDateString("fr-FR")
+  );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [remarks, setRemarks] = useState('');
   const [showCabinetSelector, setShowCabinetSelector] = useState(false);
@@ -364,8 +374,16 @@ export default function App() {
     pdf.save(fileName);
   };
 
+  // 🔐 Si pas connecté → on affiche la page de login
   if (!isLoggedIn) {
-    return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
+    return (
+      <LoginPage
+        onLogin={() => {
+          localStorage.setItem('isAuthenticated', 'true'); // persistance
+          setIsLoggedIn(true);
+        }}
+      />
+    );
   }
 
   return (
