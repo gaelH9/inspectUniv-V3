@@ -434,7 +434,7 @@ export default function App() {
   const generatePDF = async () => {
   if (!imagesLoaded) {
     alert("Info : les images (logo / signatures) ne sont pas encore chargées. Réessaie dans quelques secondes.");
-    return;
+    //return;
   }
 
   const element = document.getElementById("inspection-form");
