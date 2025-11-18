@@ -588,21 +588,21 @@ if (photoContainer && croppedImage) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-2 sm:p-4">
       {storageWarning && (
-        <div className="max-w-[1000px] mx-auto mb-4">
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 flex items-center gap-2 text-amber-700">
-            <AlertTriangle className="w-5 h-5" />
-            <span className="text-sm">{storageWarning}</span>
+        <div className="max-w-[1000px] mx-auto mb-2 sm:mb-4 px-2">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 sm:p-3 flex items-center gap-2 text-amber-700">
+            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+            <span className="text-xs sm:text-sm">{storageWarning}</span>
           </div>
         </div>
       )}
 
-      <div className="max-w-[1000px] mx-auto mb-4">
-        <div className="bg-white rounded-lg shadow p-3">
-          <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="max-w-[1000px] mx-auto mb-2 sm:mb-4 px-2">
+        <div className="bg-white rounded-lg shadow p-2 sm:p-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
                 Établissement
               </label>
               <select
@@ -612,7 +612,7 @@ if (photoContainer && croppedImage) {
                   const newCabinet = filteredCabinets[0] || cabinets[0];
                   handleCabinetChange(newCabinet);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Tous les établissements</option>
                 {establishments.map((establishment) => (
@@ -623,7 +623,7 @@ if (photoContainer && croppedImage) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
+              <label className="block text-xs sm:text-sm font-bold text-gray-700 mb-1 sm:mb-2">
                 Type d'appareil
               </label>
               <select
@@ -633,7 +633,7 @@ if (photoContainer && croppedImage) {
                   const newCabinet = filteredCabinets[0] || cabinets[0];
                   handleCabinetChange(newCabinet);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Tous les types</option>
                 {deviceTypes.map((type) => (
@@ -645,17 +645,17 @@ if (photoContainer && croppedImage) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-bold text-gray-700">Sélectionner un équipement:</span>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+            <span className="text-xs sm:text-sm font-bold text-gray-700">Sélectionner un équipement:</span>
             <div className="flex-1 relative">
               <button
                 onClick={() => setShowCabinetSelector(!showCabinetSelector)}
-                className="w-full flex items-center justify-between gap-2 px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border"
+                className="w-full flex items-center justify-between gap-2 px-2 sm:px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border"
               >
-                <span className="text-sm">
+                <span className="text-xs sm:text-sm truncate">
                   {`${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedCabinet.type} - ${selectedCabinet.identification}`}
                 </span>
-                <ChevronDown size={16} className="text-gray-600" />
+                <ChevronDown size={16} className="text-gray-600 flex-shrink-0" />
               </button>
               {showCabinetSelector && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-lg shadow-xl border p-1 z-10 max-h-60 overflow-y-auto">
@@ -663,7 +663,7 @@ if (photoContainer && croppedImage) {
                     <button
                       key={index}
                       onClick={() => handleCabinetChange(cabinet)}
-                      className="w-full text-left px-2 py-1.5 hover:bg-gray-100 rounded text-sm transition-colors"
+                      className="w-full text-left px-2 py-1.5 hover:bg-gray-100 rounded text-xs sm:text-sm transition-colors"
                     >
                       {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification}`}
                     </button>
@@ -673,18 +673,19 @@ if (photoContainer && croppedImage) {
             </div>
             <button
               onClick={() => setShowAddEquipmentForm(true)}
-              className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
             >
-              <Plus size={16} />
-              <span className="text-sm font-medium">Ajouter</span>
+              <Plus size={16} className="flex-shrink-0" />
+              <span className="text-xs sm:text-sm font-medium">Ajouter</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-[1000px] mx-auto grid grid-cols-[200px_1fr] gap-4">
-        <div>
-          <div className="bg-white rounded-lg shadow p-3">
+      {/* Responsive layout: colonne unique sur mobile, deux colonnes sur tablette+ */}
+      <div className="max-w-[1000px] mx-auto grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-2 sm:gap-4 px-2">
+        <div className="order-2 lg:order-1">
+          <div className="bg-white rounded-lg shadow p-2 sm:p-3">
             <QuickRemarks
               deviceType={
                 selectedCabinet.type === 'Sorbonne' ? 'sorbonne' :
@@ -702,7 +703,17 @@ if (photoContainer && croppedImage) {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6" id="inspection-form" style={{ minHeight: '297mm', width: '210mm' }}>
+        {/* Wrapper responsive pour le formulaire */}
+        <div className="order-1 lg:order-2 overflow-x-auto">
+          <div
+            className="bg-white rounded-lg shadow p-3 sm:p-4 md:p-6 mx-auto"
+            id="inspection-form"
+            style={{
+              minHeight: '297mm',
+              width: '210mm',
+              maxWidth: '100%'
+            }}
+          >
           {selectedCabinet.type === 'Armoire Chimique' ? (
             <ChemicalCabinetForm
               selectedCabinet={selectedCabinet}
@@ -753,15 +764,16 @@ if (photoContainer && croppedImage) {
               Fiche PSM en cours de développement
             </div>
           ) : null}
+          </div>
         </div>
       </div>
 
-      <div className="max-w-[1000px] mx-auto mt-4 flex justify-end">
+      <div className="max-w-[1000px] mx-auto mt-2 sm:mt-4 flex justify-center sm:justify-end px-2">
         <button
           onClick={generatePDF}
-          className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:from-blue-700 hover:to-blue-800 transition-all shadow hover:shadow-lg text-sm"
+          className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg flex items-center gap-2 hover:from-blue-700 hover:to-blue-800 transition-all shadow hover:shadow-lg text-sm font-medium w-full sm:w-auto justify-center"
         >
-          <FileDown size={18} />
+          <FileDown size={18} className="flex-shrink-0" />
           Export PDF
         </button>
       </div>

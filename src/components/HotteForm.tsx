@@ -97,26 +97,26 @@ export function HotteForm({
 
   return (
     <div>
-      <div className="flex justify-center items-center mb-4 pb-3 border-b">
+      <div className="flex justify-center items-center mb-3 sm:mb-4 pb-2 sm:pb-3 border-b">
         <div className="flex flex-col items-center">
           <img
             src={logo}
             alt="HYGITEK"
-            className="h-24 object-contain mb-1"
+            className="h-16 sm:h-20 md:h-24 object-contain mb-1"
           />
-          <div className="text-xs text-gray-600 font-medium">Pole Expertise</div>
+          <div className="text-[10px] sm:text-xs text-gray-600 font-medium">Pole Expertise</div>
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white text-center py-2 rounded-lg mb-4 font-bold text-xl tracking-wide shadow-sm">
+      <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white text-center py-1.5 sm:py-2 rounded-lg mb-3 sm:mb-4 font-bold text-lg sm:text-xl tracking-wide shadow-sm">
         HOTTE
       </div>
 
-      <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1.5 rounded-lg mb-4 font-medium tracking-wide shadow-sm text-sm">
+      <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 sm:py-1.5 rounded-lg mb-3 sm:mb-4 font-medium tracking-wide shadow-sm text-xs sm:text-sm">
         {selectedCabinet.establishment}
       </div>
 
-      <div className="grid grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-3 sm:mb-4">
         <div className="border rounded-lg p-2 flex items-center bg-gray-50 shadow-sm">
           <span className="text-xs font-bold min-w-16 text-gray-700">Date:</span>
           <div className="flex-1 flex items-center gap-1">
