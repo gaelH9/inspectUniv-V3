@@ -305,7 +305,7 @@ export default function App() {
     setCroppedImage(null);
   };
 
-  const generatePDF = async () => {
+  const generatePDF02 = async () => {
     if (!imagesLoaded) {
       alert('Ibnfo : Chargement des images error ...');
      //return;
@@ -430,6 +430,145 @@ export default function App() {
 
     pdf.save(fileName);
   };
+
+  const generatePDF = async () => {
+  if (!imagesLoaded) {
+    alert("Info : les images (logo / signatures) ne sont pas encore chargées. Réessaie dans quelques secondes.");
+    return;
+  }
+
+  const element = document.getElementById("inspection-form");
+  if (!element) return;
+
+  try {
+    const canvas = await html2canvas(element, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      logging: true,
+      imageTimeout: 0,
+      onclone: (clonedDoc) => {
+        // 1) Masquer les éléments inutiles pour le PDF
+        const calendarButtons = clonedDoc.querySelectorAll(".pdf-hide");
+        calendarButtons.forEach((button) => {
+          (button as HTMLElement).style.display = "none";
+        });
+
+        // 2) Remplacer les inputs numériques par des div statiques
+        const inputs = clonedDoc.querySelectorAll('input[type="number"]');
+        inputs.forEach((input) => {
+          const inputElement = input as HTMLInputElement;
+          const value = inputElement.value;
+          const div = document.createElement("div");
+          div.textContent = value || "0.00";
+          div.style.textAlign = "center";
+          div.style.padding = "4px";
+          inputElement.parentNode?.replaceChild(div, inputElement);
+        });
+
+        // 3) Transformer le textarea des remarques en div
+        const remarksTextarea = clonedDoc.querySelector("textarea");
+        if (remarksTextarea) {
+          const textareaElement = remarksTextarea as HTMLTextAreaElement;
+          const div = document.createElement("div");
+          div.style.whiteSpace = "pre-wrap";
+          div.style.wordBreak = "break-word";
+          div.style.width = "100%";
+          div.style.height = "100%";
+          div.style.padding = textareaElement.style.padding;
+          div.style.border = textareaElement.style.border;
+          div.style.borderRadius = textareaElement.style.borderRadius;
+          div.style.backgroundColor = textareaElement.style.backgroundColor;
+          div.textContent = textareaElement.value;
+          textareaElement.parentNode?.replaceChild(div, textareaElement);
+        }
+
+        // 4) Gestion spécifique de la photo upload/croppée
+        const photoContainer = clonedDoc.querySelector(".photo-container");
+        if (photoContainer && croppedImage) {
+          const containerDiv = photoContainer as HTMLElement;
+          containerDiv.style.display = "flex";
+          containerDiv.style.alignItems = "center";
+          containerDiv.style.justifyContent = "center";
+          containerDiv.style.backgroundColor = "white";
+          containerDiv.style.position = "relative";
+
+          // On applique la photo comme background-image
+          containerDiv.style.backgroundImage = `url(${croppedImage})`;
+          containerDiv.style.backgroundRepeat = "no-repeat";
+          containerDiv.style.backgroundPosition = "center";
+          containerDiv.style.backgroundSize = "contain";
+
+          // On supprime l'éventuel <img> pour éviter les soucis de rendu
+          const img = photoContainer.querySelector("img");
+          if (img) {
+            img.remove();
+          }
+        }
+
+        // 5) Remplacer les images logo / signatures par leur base64
+        const images = clonedDoc.querySelectorAll("img");
+        images.forEach((img) => {
+          const htmlImg = img as HTMLImageElement;
+          if (htmlImg.src.includes("logo.png")) {
+            htmlImg.src = logoBase64;
+          } else if (htmlImg.src.includes("sig1.png")) {
+            htmlImg.src = sig1Base64;
+          } else if (htmlImg.src.includes("sig2.png")) {
+            htmlImg.src = sig2Base64;
+          }
+          htmlImg.style.maxWidth = "100%";
+          htmlImg.style.maxHeight = "100%";
+          htmlImg.style.objectFit = "contain";
+        });
+      },
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const sideWidth = 12;
+
+    pdf.setFillColor(0, 150, 214);
+    pdf.rect(0, 0, sideWidth, pdfHeight, "F");
+
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    const marginLeft = 15;
+    const marginTop = 2;
+    const availableWidth = pdfWidth - sideWidth - marginLeft;
+    const availableHeight = pdfHeight - marginTop * 2;
+
+    const ratio = Math.min(
+      availableWidth / imgWidth,
+      availableHeight / imgHeight
+    );
+
+    const finalWidth = imgWidth * ratio;
+    const finalHeight = imgHeight * ratio;
+
+    const x = sideWidth + (availableWidth - finalWidth) / 2 + marginLeft / 2;
+    const y = (pdfHeight - finalHeight) / 2;
+
+    pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
+
+    const fileName = `${selectedCabinet.type} - ${selectedCabinet.identification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`.replace(
+      /[/\\?%*:|"<>]/g,
+      "-"
+    );
+
+    pdf.save(fileName);
+  } catch (error) {
+    console.error("Erreur lors de la génération du PDF :", error);
+    alert("Une erreur est survenue lors de la génération du PDF.");
+  }
+};
+
 
   // 🔐 Si pas connecté → on affiche la page de login
   if (!isLoggedIn) {
