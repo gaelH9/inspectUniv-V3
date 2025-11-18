@@ -45,6 +45,8 @@ export default function App() {
   });
   const [showCropModal, setShowCropModal] = useState(false);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [showCameraCapture, setShowCameraCapture] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [logoBase64, setLogoBase64] = useState<string>('');
   const [sig1Base64, setSig1Base64] = useState<string>('');
@@ -118,6 +120,60 @@ export default function App() {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  const handleCameraCapture = () => {
+    setShowCameraCapture(true);
+  };
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error('Erreur accès caméra:', err);
+      alert('Impossible d\'accéder à la caméra');
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth;
+    canvas.height = videoRef.current.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(videoRef.current, 0, 0);
+      const imageDataUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+      stopCamera();
+      setUploadedImage(imageDataUrl);
+      setShowCameraCapture(false);
+      setShowCropModal(true);
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+  };
+
+  useEffect(() => {
+    if (showCameraCapture && videoRef.current) {
+      startCamera();
+    }
+    return () => {
+      stopCamera();
+    };
+  }, [showCameraCapture]);
 
   const onImageLoad = useCallback((image: HTMLImageElement) => {
     imageRef.current = image;
@@ -299,17 +355,18 @@ export default function App() {
         }
 
         const photoContainer = clonedDoc.querySelector('.photo-container');
-        if (photoContainer) {
+        if (photoContainer && croppedImage) {
           const containerDiv = photoContainer as HTMLElement;
           containerDiv.style.display = 'flex';
           containerDiv.style.alignItems = 'center';
           containerDiv.style.justifyContent = 'center';
           containerDiv.style.backgroundColor = 'white';
           containerDiv.style.position = 'relative';
-          
+
           const img = photoContainer.querySelector('img');
           if (img) {
-            const imgElement = img as HTMLElement;
+            const imgElement = img as HTMLImageElement;
+            imgElement.src = croppedImage;
             imgElement.style.position = 'relative';
             imgElement.style.maxWidth = '100%';
             imgElement.style.maxHeight = '100%';
@@ -515,6 +572,7 @@ export default function App() {
               setRemarks={setRemarks}
               croppedImage={croppedImage}
               handleImageUpload={handleImageUpload}
+              handleCameraCapture={handleCameraCapture}
             />
           ) : selectedCabinet.type === 'Sorbonne' ? (
             <SorbonneForm
@@ -529,6 +587,7 @@ export default function App() {
               setRemarks={setRemarks}
               croppedImage={croppedImage}
               handleImageUpload={handleImageUpload}
+              handleCameraCapture={handleCameraCapture}
             />
           ) : selectedCabinet.type === 'Hotte' ? (
             <HotteForm
@@ -543,6 +602,7 @@ export default function App() {
               setRemarks={setRemarks}
               croppedImage={croppedImage}
               handleImageUpload={handleImageUpload}
+              handleCameraCapture={handleCameraCapture}
             />
           ) : selectedCabinet.type === 'PSM' ? (
             <div className="flex items-center justify-center h-full text-gray-500">
@@ -569,6 +629,39 @@ export default function App() {
             onAdd={handleAddEquipment}
             onExport={handleExportEquipment}
           />
+        </div>
+      )}
+
+      {showCameraCapture && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 p-6">
+            <h3 className="text-lg font-bold mb-4 text-gray-800">Prendre une photo</h3>
+            <div className="max-h-[70vh] overflow-auto mb-4">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full rounded-lg"
+              />
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  stopCamera();
+                  setShowCameraCapture(false);
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={capturePhoto}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+              >
+                Capturer
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

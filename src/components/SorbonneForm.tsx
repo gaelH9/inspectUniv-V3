@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, CheckCircle2, AlertTriangle, XCircle } from 'lucide-react';
+import { Calendar, CheckCircle2, AlertTriangle, XCircle, Camera } from 'lucide-react';
 import type { Cabinet } from '../data/cabinets';
 
 import logo from "../assets/images/logo.png";
@@ -18,6 +18,7 @@ interface SorbonneFormProps {
   setRemarks: (remarks: string) => void;
   croppedImage: string | null;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCameraCapture: () => void;
 }
 
 const getStatusDisplay = (status: string) => {
@@ -64,7 +65,8 @@ export function SorbonneForm({
   remarks,
   setRemarks,
   croppedImage,
-  handleImageUpload
+  handleImageUpload,
+  handleCameraCapture
 }: SorbonneFormProps) {
   const [airSpeed, setAirSpeed] = useState<string>('');
 
@@ -283,8 +285,18 @@ export function SorbonneForm({
           />
         </div>
         <div>
-          <div className="font-bold mb-1 text-gray-700 text-xs">Photo:</div>
-          <label 
+          <div className="font-bold mb-1 text-gray-700 text-xs flex items-center justify-between">
+            <span>Photo:</span>
+            <button
+              onClick={handleCameraCapture}
+              className="flex items-center gap-1 px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors print:hidden pdf-hide"
+              type="button"
+            >
+              <Camera size={14} />
+              Prendre photo
+            </button>
+          </div>
+          <label
             className="photo-container w-full h-48 border border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 text-xs bg-white cursor-pointer hover:bg-gray-50 transition-all focus:ring-2 focus:ring-blue-500 relative"
             style={{ borderStyle: 'dashed' }}
           >
