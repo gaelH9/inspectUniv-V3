@@ -244,7 +244,7 @@ export default function App() {
   const generatePDF = async () => {
     if (!imagesLoaded) {
       alert('Veuillez patienter pendant le chargement des images...');
-      return;
+      //return; -> Off
     }
 
     const element = document.getElementById('inspection-form');
