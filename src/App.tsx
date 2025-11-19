@@ -355,25 +355,48 @@ export default function App() {
         }
 
         const photoContainer = clonedDoc.querySelector('.photo-container');
-        if (photoContainer && croppedImage) {
+        if (photoContainer) {
           const containerDiv = photoContainer as HTMLElement;
-          containerDiv.style.display = 'flex';
-          containerDiv.style.alignItems = 'center';
-          containerDiv.style.justifyContent = 'center';
-          containerDiv.style.backgroundColor = 'white';
-          containerDiv.style.position = 'relative';
 
-          const img = photoContainer.querySelector('img');
-          if (img) {
-            const imgElement = img as HTMLImageElement;
-            imgElement.src = croppedImage;
-            imgElement.style.position = 'relative';
-            imgElement.style.maxWidth = '100%';
-            imgElement.style.maxHeight = '100%';
-            imgElement.style.width = 'auto';
-            imgElement.style.height = 'auto';
-            imgElement.style.objectFit = 'contain';
-            imgElement.style.margin = 'auto';
+          if (croppedImage) {
+            // Si une photo existe, on la configure correctement
+            containerDiv.style.display = 'flex';
+            containerDiv.style.alignItems = 'center';
+            containerDiv.style.justifyContent = 'center';
+            containerDiv.style.backgroundColor = '#ffffff';
+            containerDiv.style.position = 'relative';
+            containerDiv.style.overflow = 'hidden';
+
+            const img = photoContainer.querySelector('img');
+            if (img) {
+              const imgElement = img as HTMLImageElement;
+              imgElement.src = croppedImage;
+              imgElement.style.display = 'block';
+              imgElement.style.position = 'relative';
+              imgElement.style.maxWidth = '100%';
+              imgElement.style.maxHeight = '100%';
+              imgElement.style.width = 'auto';
+              imgElement.style.height = 'auto';
+              imgElement.style.objectFit = 'contain';
+              imgElement.style.margin = 'auto';
+            }
+
+            // Supprimer tous les autres éléments (texte "Drop photo here", etc.)
+            const textElements = photoContainer.querySelectorAll('div:not(.w-full.h-full), p, span');
+            textElements.forEach(el => {
+              const element = el as HTMLElement;
+              if (element && !element.querySelector('img')) {
+                element.style.display = 'none';
+              }
+            });
+          } else {
+            // Si pas de photo, on nettoie complètement le conteneur
+            while (containerDiv.firstChild) {
+              containerDiv.removeChild(containerDiv.firstChild);
+            }
+            containerDiv.style.backgroundColor = '#ffffff';
+            containerDiv.style.border = '1px dashed #d1d5db';
+            containerDiv.style.borderRadius = '0.5rem';
           }
         }
 
