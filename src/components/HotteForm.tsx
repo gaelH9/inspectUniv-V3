@@ -4,6 +4,7 @@ import type { Cabinet } from '../data/cabinets';
 
 import logo from "../assets/images/logo.png";
 import sig1 from "../assets/images/sig1.png";
+import sig2 from "../assets/images/sig2.png";
 
 interface HotteFormProps {
   selectedCabinet: Cabinet;
@@ -281,10 +282,10 @@ export function HotteForm({
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div>
           <div className="font-bold mb-1 text-gray-700 text-xs">Remarque:</div>
-          <textarea
+          <textarea 
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
-            className="w-full h-80 border border-gray-300 rounded-lg p-2 text-sm bg-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+            className="w-full h-48 border border-gray-300 rounded-lg p-2 text-sm bg-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
             style={{ borderStyle: 'dashed' }}
           />
         </div>
@@ -301,7 +302,7 @@ export function HotteForm({
             </button>
           </div>
           <label
-            className="photo-container w-full h-80 border border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 text-xs bg-white cursor-pointer hover:bg-gray-50 transition-all focus:ring-2 focus:ring-blue-500 relative"
+            className="photo-container w-full h-48 border border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 text-xs bg-white cursor-pointer hover:bg-gray-50 transition-all focus:ring-2 focus:ring-blue-500 relative"
             style={{ borderStyle: 'dashed' }}
           >
             <input
@@ -333,13 +334,23 @@ export function HotteForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 mt-6">
+      <div className="grid grid-cols-2 gap-4 mt-6">
         <div>
           <div className="font-bold mb-2 text-gray-700 text-xs">Identification et VISA Contrôleur:</div>
           <div className="w-full h-28 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
-            <img
+            <img 
               src={sig1}
-              alt="Signature Contrôleur"
+              alt="Signature Contrôleur" 
+              className="max-h-full object-contain p-3"
+            />
+          </div>
+        </div>
+        <div>
+          <div className="font-bold mb-2 text-gray-700 text-xs">Identification et VISA Maintenance:</div>
+          <div className="w-full h-28 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
+            <img 
+              src={sig2}
+              alt="Signature Maintenance" 
               className="max-h-full object-contain p-3"
             />
           </div>
