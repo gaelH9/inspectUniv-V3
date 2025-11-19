@@ -90,7 +90,7 @@ export function ChemicalCabinetForm({
             alt="Logo"
             className="h-24 object-contain mb-1"
           />
-          <div className="text-sm text-gray-600 font-medium">Pole Expertise</div>
+         
         </div>
       </div>
 
