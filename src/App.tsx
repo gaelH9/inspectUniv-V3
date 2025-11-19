@@ -66,7 +66,7 @@ export default function App() {
     parois: 'conforme',
     etancheite_extraction: 'conforme',
     proprete_extraction: 'conforme',
-    test_fumigene: '',
+    test_fumigene: 'conforme',
     vitesse_air: ''
   });
 
