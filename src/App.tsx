@@ -249,7 +249,7 @@ export default function App() {
 
     const element = document.getElementById('inspection-form');
     if (!element) return;
-    
+
     const canvas = await html2canvas(element, {
       backgroundColor: '#ffffff',
       scale: 2,
@@ -257,7 +257,16 @@ export default function App() {
       allowTaint: true,
       logging: true,
       imageTimeout: 0,
+      scrollY: 0,
+      scrollX: 0,
+      windowHeight: element.scrollHeight,
       onclone: (clonedDoc) => {
+        const clonedElement = clonedDoc.getElementById('inspection-form');
+        if (clonedElement) {
+          clonedElement.style.minHeight = 'auto';
+          clonedElement.style.height = 'auto';
+        }
+
         const calendarButtons = clonedDoc.querySelectorAll('.pdf-hide');
         calendarButtons.forEach(button => {
           (button as HTMLElement).style.display = 'none';
@@ -271,6 +280,8 @@ export default function App() {
           div.textContent = value || '0.00';
           div.style.textAlign = 'center';
           div.style.padding = '4px';
+          div.style.border = '1px solid #d1d5db';
+          div.style.borderRadius = '0.25rem';
           inputElement.parentNode?.replaceChild(div, inputElement);
         });
 
@@ -281,11 +292,12 @@ export default function App() {
           div.style.whiteSpace = 'pre-wrap';
           div.style.wordBreak = 'break-word';
           div.style.width = '100%';
-          div.style.height = '100%';
-          div.style.padding = textareaElement.style.padding;
-          div.style.border = textareaElement.style.border;
-          div.style.borderRadius = textareaElement.style.borderRadius;
-          div.style.backgroundColor = textareaElement.style.backgroundColor;
+          div.style.minHeight = '192px';
+          div.style.padding = '0.5rem';
+          div.style.border = '1px dashed #d1d5db';
+          div.style.borderRadius = '0.5rem';
+          div.style.backgroundColor = '#ffffff';
+          div.style.fontSize = '0.875rem';
           div.textContent = textareaElement.value;
           textareaElement.parentNode?.replaceChild(div, textareaElement);
         }
@@ -293,22 +305,47 @@ export default function App() {
         const photoContainer = clonedDoc.querySelector('.photo-container');
         if (photoContainer) {
           const containerDiv = photoContainer as HTMLElement;
-          containerDiv.style.display = 'flex';
-          containerDiv.style.alignItems = 'center';
-          containerDiv.style.justifyContent = 'center';
-          containerDiv.style.backgroundColor = 'white';
-          containerDiv.style.position = 'relative';
-          
-          const img = photoContainer.querySelector('img');
-          if (img) {
-            const imgElement = img as HTMLElement;
-            imgElement.style.position = 'relative';
-            imgElement.style.maxWidth = '100%';
-            imgElement.style.maxHeight = '100%';
-            imgElement.style.width = 'auto';
-            imgElement.style.height = 'auto';
-            imgElement.style.objectFit = 'contain';
-            imgElement.style.margin = 'auto';
+
+          if (croppedImage) {
+            containerDiv.style.display = 'flex';
+            containerDiv.style.alignItems = 'center';
+            containerDiv.style.justifyContent = 'center';
+            containerDiv.style.backgroundColor = '#ffffff';
+            containerDiv.style.position = 'relative';
+            containerDiv.style.overflow = 'hidden';
+            containerDiv.style.border = '1px dashed #d1d5db';
+            containerDiv.style.borderRadius = '0.5rem';
+            containerDiv.style.height = '320px';
+
+            const img = photoContainer.querySelector('img');
+            if (img) {
+              const imgElement = img as HTMLImageElement;
+              imgElement.src = croppedImage;
+              imgElement.style.display = 'block';
+              imgElement.style.position = 'relative';
+              imgElement.style.maxWidth = '100%';
+              imgElement.style.maxHeight = '100%';
+              imgElement.style.width = 'auto';
+              imgElement.style.height = 'auto';
+              imgElement.style.objectFit = 'contain';
+              imgElement.style.margin = 'auto';
+            }
+
+            const textElements = photoContainer.querySelectorAll('div:not(.w-full.h-full), p, span');
+            textElements.forEach(el => {
+              const element = el as HTMLElement;
+              if (element && !element.querySelector('img')) {
+                element.style.display = 'none';
+              }
+            });
+          } else {
+            while (containerDiv.firstChild) {
+              containerDiv.removeChild(containerDiv.firstChild);
+            }
+            containerDiv.style.backgroundColor = '#ffffff';
+            containerDiv.style.border = '1px dashed #d1d5db';
+            containerDiv.style.borderRadius = '0.5rem';
+            containerDiv.style.height = '320px';
           }
         }
 
@@ -327,37 +364,38 @@ export default function App() {
         });
       }
     });
-    
+
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4');
-    
+
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-    
+
     const sideWidth = 12;
-    
+
     pdf.setFillColor(0, 150, 214);
     pdf.rect(0, 0, sideWidth, pdfHeight, 'F');
-    
+
     const imgWidth = canvas.width;
     const imgHeight = canvas.height;
-    
-    const marginLeft = 15;
-    const marginTop = 2;
-    const availableWidth = pdfWidth - sideWidth - marginLeft;
-    const availableHeight = pdfHeight - (marginTop * 2);
-    
+
+    const marginLeft = 14;
+    const marginTop = 5;
+    const marginBottom = 5;
+    const availableWidth = pdfWidth - sideWidth - marginLeft - 2;
+    const availableHeight = pdfHeight - marginTop - marginBottom;
+
     const ratio = Math.min(
       availableWidth / imgWidth,
       availableHeight / imgHeight
     );
-    
+
     const finalWidth = imgWidth * ratio;
     const finalHeight = imgHeight * ratio;
-    
-    const x = sideWidth + ((availableWidth - finalWidth) / 2) + (marginLeft / 2);
-    const y = (pdfHeight - finalHeight) / 2;
-    
+
+    const x = sideWidth + marginLeft;
+    const y = marginTop;
+
     pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 
     const fileName = `${selectedCabinet.type} - ${selectedCabinet.identification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
