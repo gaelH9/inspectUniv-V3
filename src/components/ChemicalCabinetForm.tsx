@@ -228,7 +228,7 @@ export function ChemicalCabinetForm({
           </div>
           <label
             className="photo-container w-full border border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 text-xs bg-white cursor-pointer hover:bg-gray-50 transition-all focus:ring-2 focus:ring-blue-500 relative"
-            style={{ borderStyle: 'dashed', height: 'calc(100% - 24px)' }}
+            style={{ borderStyle: 'dashed', height: '320px' }}
           >
             <input
               type="file"
