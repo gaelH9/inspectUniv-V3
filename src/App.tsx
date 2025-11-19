@@ -406,8 +406,6 @@ export default function App() {
             img.src = logoBase64;
           } else if (img.src.includes('sig1.png')) {
             img.src = sig1Base64;
-            img.style.display = 'block';
-            img.style.visibility = 'visible';
           } else if (img.src.includes('sig2.png')) {
             img.src = sig2Base64;
           }
