@@ -303,10 +303,7 @@ export default function App() {
   };
 
   const generatePDF = async () => {
-    if (!imagesLoaded) {
-      alert('Veuillez patienter pendant le chargement des images...');
-      //return; -> Off
-    }
+    //if (!imagesLoaded) { alert('Veuillez patienter pendant le chargement des images...');  return; -> Off  }
 
     const element = document.getElementById('inspection-form');
     if (!element) return;
