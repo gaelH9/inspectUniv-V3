@@ -70,6 +70,12 @@ export function SorbonneForm({
 }: SorbonneFormProps) {
   const [airSpeed, setAirSpeed] = useState<string>('');
 
+  useEffect(() => {
+    if (!croppedImage && remarks === '') {
+      setAirSpeed('');
+    }
+  }, [croppedImage, remarks]);
+
   const functionalItems = [
     { key: 'ventilateur', label: 'Ventilation / Extracteur' },
     { key: 'eclairage', label: 'Éclairage' },

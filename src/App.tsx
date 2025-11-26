@@ -32,6 +32,7 @@ export default function App() {
   const [showAddEquipmentForm, setShowAddEquipmentForm] = useState(false);
   const [equipmentList, setEquipmentList] = useState<Cabinet[]>([]);
   const [storageWarning, setStorageWarning] = useState<string>('');
+  const [processedEquipment, setProcessedEquipment] = useState<Set<string>>(new Set());
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>({
     unit: 'px',
@@ -302,6 +303,34 @@ export default function App() {
     setCroppedImage(null);
   };
 
+  const resetFormFields = () => {
+    setCroppedImage(null);
+    setRemarks('');
+    setInspectionStatus({
+      extracteur: 'conforme',
+      filtre: 'conforme',
+      etageres: 'conforme',
+      portes: 'conforme',
+      interieur: 'conforme',
+      exterieur: 'conforme',
+      etancheite: 'conforme',
+      ventilateur: 'conforme',
+      guillotine: 'conforme',
+      eclairage: 'conforme',
+      alarme: 'conforme',
+      vitre: 'conforme',
+      parois: 'conforme',
+      etancheite_extraction: 'conforme',
+      proprete_extraction: 'conforme',
+      test_fumigene: 'conforme',
+      vitesse_air: ''
+    });
+  };
+
+  const getEquipmentKey = (cabinet: Cabinet): string => {
+    return `${cabinet.establishment}-${cabinet.room}-${cabinet.type}-${cabinet.identification}`;
+  };
+
   const generatePDF = async () => {
     //if (!imagesLoaded) { alert('Veuillez patienter pendant le chargement des images...');  return; -> Off  }
 
@@ -460,6 +489,11 @@ export default function App() {
       .replace(/[/\\?%*:|"<>]/g, '-');
 
     pdf.save(fileName);
+
+    const equipmentKey = getEquipmentKey(selectedCabinet);
+    setProcessedEquipment(prev => new Set(prev).add(equipmentKey));
+
+    resetFormFields();
   };
 
   // 🔐 Si pas connecté → on affiche la page de login
@@ -546,15 +580,21 @@ export default function App() {
               </button>
               {showCabinetSelector && (
                 <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-lg shadow-xl border p-1 z-10 max-h-60 overflow-y-auto">
-                  {filteredCabinets.map((cabinet, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleCabinetChange(cabinet)}
-                      className="w-full text-left px-2 py-1.5 hover:bg-gray-100 rounded text-xs sm:text-sm transition-colors"
-                    >
-                      {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification}`}
-                    </button>
-                  ))}
+                  {filteredCabinets.map((cabinet, index) => {
+                    const equipmentKey = getEquipmentKey(cabinet);
+                    const isProcessed = processedEquipment.has(equipmentKey);
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleCabinetChange(cabinet)}
+                        className={`w-full text-left px-2 py-1.5 hover:bg-gray-100 rounded text-xs sm:text-sm transition-colors ${
+                          isProcessed ? 'bg-green-100 hover:bg-green-200' : ''
+                        }`}
+                      >
+                        {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification}`}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>

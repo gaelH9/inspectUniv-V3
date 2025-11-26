@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, CheckCircle2, AlertTriangle, XCircle, Camera } from 'lucide-react';
 import type { Cabinet } from '../data/cabinets';
 
@@ -69,6 +69,12 @@ export function HotteForm({
   handleCameraCapture
 }: HotteFormProps) {
   const [airSpeed, setAirSpeed] = useState<string>('');
+
+  useEffect(() => {
+    if (!croppedImage && remarks === '') {
+      setAirSpeed('');
+    }
+  }, [croppedImage, remarks]);
 
   const functionalItems = [
     { key: 'ventilateur', label: 'Ventilation / Extracteur' },
