@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, CheckCircle2, AlertTriangle, XCircle, Camera } from 'lucide-react';
 import type { Cabinet } from '../data/cabinets';
 
