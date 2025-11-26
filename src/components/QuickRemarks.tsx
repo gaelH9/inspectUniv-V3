@@ -57,8 +57,7 @@ const remarksData = {
     { key: "Maintenance", "text": "Maintenance préventive recommandée pour éviter une détérioration future." }
   ],
   armoire: [
-    { key: 'PressionPSI', text: 'La pression interne de l’armoire chimique a été mesurée afin d’attester de sa dépression opérationnelle.
-Pression enregistrée (Pa) :   ' },
+    { key: 'PressionPSI', text: 'La pression interne de l’armoire chimique a été mesurée afin d’attester de sa dépression opérationnelle. Pression enregistrée (Pa) :   ' },
     { key: 'info2', text: 'Aucune valeur minimale normative n’est définie pour la requalification des armoires chimiques ventilées.' },
     { key: "New ID", "text": "Nouvel identifiant attribué. Une étiquette sera apposée sur l'appareil." },
     { key: 'Ventilation', text: 'Ventilation absente ou inefficace.' },
