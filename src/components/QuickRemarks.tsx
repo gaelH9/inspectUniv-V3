@@ -44,21 +44,22 @@ const criteriaList = {
 const remarksData = {
   sorbonne: [
     { key: "New ID", "text": "Nouvel identifiant attribué. Une étiquette sera apposée sur l'appareil." },
-    { key: "Débit", "text": "Débit d'air non conforme au paramètres." },
-    { key: "Vitesse", "text": "Vitesse d'air non conforme." },
+    { key: "Débit NC", "text": "Débit d'air non conforme au paramètres." },
+    { key: "Obstruer", "text": "Appareil obstrué par du matériel" },
     { key: "Fuite", "text": "Présence de fuite détectée, contrôle de l'étanchéité recommandé." },
     { key: "Éclairage", "text": "Éclairage défectueux, remplacement nécessaire." },
     { key: "Guillotine", "text": "Problème d'ouverture/fermeture de la guillotine, maintenance requise." },
-    { key: "Alarme", "text": "Alarme de sécurité non fonctionnelle, intervention urgente requise." },
-    { key: "Alarme ON", "text": "Alarme de sécurité non fonctionnelle, se déclanche dans raison." },
+    { key: "Alarme HS", "text": "Alarme de sécurité non fonctionnelle, intervention urgente requise." },
+    { key: "Alarme ON", "text": "Alarme de sécurité non fonctionnelle, se déclanche sans raison." },
     { key: "Extraction", "text": "Circuit d'extraction encrassé." },
     { key: "Test fumigène", "text": "Test fumigène non concluant." },
     { key: "Structure", "text": "Dégradation de la façade vitrée ou des parois." },
     { key: "Maintenance", "text": "Maintenance préventive recommandée pour éviter une détérioration future." }
   ],
   armoire: [
-    { key: 'FluxInfo', text: 'Flux d’air mesuré à titre indicatif : 000 m/s et 000 m³/h.' },
-    { key: 'FluxInfoI', text: 'Aucune valeur minimale normative n’est définie pour la requalification des armoires chimiques ventilées.' },
+    { key: 'PressionPSI', text: 'La pression interne de l’armoire chimique a été mesurée afin d’attester de sa dépression opérationnelle.
+Pression enregistrée  (Pa) :   ' },
+    { key: 'info2', text: 'Aucune valeur minimale normative n’est définie pour la requalification des armoires chimiques ventilées.' },
     { key: "New ID", "text": "Nouvel identifiant attribué. Une étiquette sera apposée sur l'appareil." },
     { key: 'Ventilation', text: 'Ventilation absente ou inefficace.' },
     { key: 'Séparation', text: 'Stockage non conforme des produits.' },
