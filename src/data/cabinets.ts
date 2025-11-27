@@ -1269,7 +1269,7 @@ export const cabinets: Cabinet[] = [
 
 
 //UFR SANTE
-
+  { establishment: "UFR Santé", identification: "", room: "D009", reference: "20120102978", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D102", reference: "20210102977", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D105", reference: "20210102985", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D105", reference: "20210102979", type: "PSM" },
@@ -1281,15 +1281,14 @@ export const cabinets: Cabinet[] = [
   { establishment: "UFR Santé", identification: "", room: "D107", reference: "20210102984", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D107", reference: "20210102987", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D107", reference: "2021010282", type: "PSM" },
-  { establishment: "UFR Santé", identification: "", room: "D009", reference: "20120102978", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D115", reference: "12469-2000", type: "PSM" },
 
-  { establishment: "UFR Santé", identification: "", room: "D113", reference: "06970", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
-  { establishment: "UFR Santé", identification: "", room: "D113", reference: "06969", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+  { establishment: "UFR Santé", identification: "", room: "D033", reference: "06984", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D101", reference: "06985", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D102", reference: "06975", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D102", reference: "33215-2101", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
-  { establishment: "UFR Santé", identification: "", room: "D033", reference: "06984", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+  { establishment: "UFR Santé", identification: "", room: "D113", reference: "06970", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+  { establishment: "UFR Santé", identification: "", room: "D113", reference: "06969", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "06962", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "06958", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "06956", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
@@ -1300,9 +1299,10 @@ export const cabinets: Cabinet[] = [
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "06961", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D121", reference: "06967", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
 
-  { establishment: "UFR Santé", identification: "", room: "D119", reference: "3372", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "D117", reference: "20789", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "D117", reference: "4233", type: "Armoire Chimique" },
+  { establishment: "UFR Santé", identification: "", room: "D119", reference: "3372", type: "Armoire Chimique" },
+
   { establishment: "UFR Santé", identification: "", room: "F103", reference: "15381", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "F103", reference: "15387", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "F103", reference: "15390", type: "Armoire Chimique" },
