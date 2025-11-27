@@ -8,6 +8,7 @@ import sig2 from "../assets/images/sig2.png";
 
 interface ChemicalCabinetFormProps {
   selectedCabinet: Cabinet;
+  customIdentification: string;
   selectedDate: string;
   showDatePicker: boolean;
   setShowDatePicker: (show: boolean) => void;
@@ -56,6 +57,7 @@ const getStatusDisplay = (status: string) => {
 
 export function ChemicalCabinetForm({
   selectedCabinet,
+  customIdentification,
   selectedDate,
   showDatePicker,
   setShowDatePicker,
@@ -131,7 +133,7 @@ export function ChemicalCabinetForm({
         </div>
         <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
           <span className="text-sm font-bold min-w-24 text-gray-700">Identifiant:</span>
-          <span className="text-sm flex-1 px-2">{selectedCabinet.identification}</span>
+          <span className="text-sm flex-1 px-2">{customIdentification}</span>
         </div>
         <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
           <span className="text-sm font-bold min-w-24 text-gray-700">Salle:</span>

@@ -8,6 +8,7 @@ import sig2 from "../assets/images/sig2.png";
 
 interface HotteFormProps {
   selectedCabinet: Cabinet;
+  customIdentification: string;
   selectedDate: string;
   showDatePicker: boolean;
   setShowDatePicker: (show: boolean) => void;
@@ -56,6 +57,7 @@ const getStatusDisplay = (status: string) => {
 
 export function HotteForm({
   selectedCabinet,
+  customIdentification,
   selectedDate,
   showDatePicker,
   setShowDatePicker,
@@ -150,7 +152,7 @@ export function HotteForm({
         </div>
         <div className="border rounded-lg p-2 flex items-center bg-gray-50 shadow-sm">
           <span className="text-xs font-bold min-w-16 text-gray-700">Identifiant:</span>
-          <span className="text-xs flex-1">{selectedCabinet.identification}</span>
+          <span className="text-xs flex-1">{customIdentification}</span>
         </div>
         <div className="border rounded-lg p-2 flex items-center bg-gray-50 shadow-sm">
           <span className="text-xs font-bold min-w-16 text-gray-700">Salle:</span>

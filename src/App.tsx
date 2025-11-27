@@ -27,6 +27,7 @@ export default function App() {
   const [remarks, setRemarks] = useState('');
   const [showCabinetSelector, setShowCabinetSelector] = useState(false);
   const [selectedCabinet, setSelectedCabinet] = useState<Cabinet>(cabinets[0]);
+  const [customIdentification, setCustomIdentification] = useState<string>(cabinets[0].identification);
   const [selectedEstablishment, setSelectedEstablishment] = useState<string>('');
   const [selectedType, setSelectedType] = useState<string>('');
   const [showAddEquipmentForm, setShowAddEquipmentForm] = useState(false);
@@ -299,6 +300,7 @@ export default function App() {
 
   const handleCabinetChange = (cabinet: Cabinet) => {
     setSelectedCabinet(cabinet);
+    setCustomIdentification(cabinet.identification);
     setShowCabinetSelector(false);
     setCroppedImage(null);
   };
@@ -485,7 +487,7 @@ export default function App() {
 
     pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 
-    const fileName = `${selectedCabinet.type} - ${selectedCabinet.identification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
+    const fileName = `${selectedCabinet.type} - ${customIdentification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
       .replace(/[/\\?%*:|"<>]/g, '-');
 
     pdf.save(fileName);
@@ -566,9 +568,10 @@ export default function App() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-            <span className="text-xs sm:text-sm font-bold text-gray-700">Sélectionner un équipement:</span>
-            <div className="flex-1 relative">
+          <div className="flex flex-col gap-2 sm:gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <span className="text-xs sm:text-sm font-bold text-gray-700">Sélectionner un équipement:</span>
+              <div className="flex-1 relative">
               <button
                 onClick={() => setShowCabinetSelector(!showCabinetSelector)}
                 className="w-full flex items-center justify-between gap-2 px-2 sm:px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border"
@@ -597,14 +600,25 @@ export default function App() {
                   })}
                 </div>
               )}
+              </div>
+              <button
+                onClick={() => setShowAddEquipmentForm(true)}
+                className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+              >
+                <Plus size={16} />
+                <span className="text-xs sm:text-sm font-medium">Ajouter</span>
+              </button>
             </div>
-            <button
-              onClick={() => setShowAddEquipmentForm(true)}
-              className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
-            >
-              <Plus size={16} />
-              <span className="text-xs sm:text-sm font-medium">Ajouter</span>
-            </button>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <span className="text-xs sm:text-sm font-bold text-gray-700 min-w-fit">Identifiant personnalisé:</span>
+              <input
+                type="text"
+                value={customIdentification}
+                onChange={(e) => setCustomIdentification(e.target.value)}
+                className="flex-1 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Modifier l'identifiant si nécessaire"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -634,6 +648,7 @@ export default function App() {
           {selectedCabinet.type === 'Armoire Chimique' ? (
             <ChemicalCabinetForm
               selectedCabinet={selectedCabinet}
+              customIdentification={customIdentification}
               selectedDate={selectedDate}
               showDatePicker={showDatePicker}
               setShowDatePicker={setShowDatePicker}
@@ -649,6 +664,7 @@ export default function App() {
           ) : selectedCabinet.type === 'Sorbonne' ? (
             <SorbonneForm
               selectedCabinet={selectedCabinet}
+              customIdentification={customIdentification}
               selectedDate={selectedDate}
               showDatePicker={showDatePicker}
               setShowDatePicker={setShowDatePicker}
@@ -664,6 +680,7 @@ export default function App() {
           ) : selectedCabinet.type === 'Hotte' ? (
             <HotteForm
               selectedCabinet={selectedCabinet}
+              customIdentification={customIdentification}
               selectedDate={selectedDate}
               showDatePicker={showDatePicker}
               setShowDatePicker={setShowDatePicker}
