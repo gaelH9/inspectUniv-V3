@@ -1282,6 +1282,9 @@ export const cabinets: Cabinet[] = [
   { establishment: "UFR Santé", identification: "", room: "D107", reference: "20210102987", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D107", reference: "2021010282", type: "PSM" },
   { establishment: "UFR Santé", identification: "", room: "D115", reference: "12469-2000", type: "PSM" },
+  // UFR SANTÉ PSM - HOR BAT SCIENCE 
+  { establishment: "UFR Santé", identification: "", room: "C003", reference: "20210102986", type: "PSM" },
+  { establishment: "UFR Santé", identification: "", room: "C003", reference: "20210102980", type: "PSM" },
 
   { establishment: "UFR Santé", identification: "", room: "D033", reference: "06984", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D101", reference: "06985", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
@@ -1298,11 +1301,15 @@ export const cabinets: Cabinet[] = [
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "06960", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "06961", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
   { establishment: "UFR Santé", identification: "", room: "D121", reference: "06967", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+ // UFR SANTÉ SORBONNE - HOR BAT SCIENCE 
+  { establishment: "UFR Santé", identification: "", room: "C001", reference: "06971", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+  { establishment: "UFR Santé", identification: "", room: "C001", reference: "06973", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+  { establishment: "UFR Santé", identification: "", room: "C002", reference: "06972", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
+  { establishment: "UFR Santé", identification: "", room: "C002", reference: "06974", type: "Sorbonne", airVelocityThresholds: { "min": 0.40, "max": 0.60, "warning": 0.40 } },
 
   { establishment: "UFR Santé", identification: "", room: "D117", reference: "20789", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "D117", reference: "4233", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "D119", reference: "3372", type: "Armoire Chimique" },
-
   { establishment: "UFR Santé", identification: "", room: "F103", reference: "15381", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "F103", reference: "15387", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "F103", reference: "15390", type: "Armoire Chimique" },
@@ -1322,7 +1329,12 @@ export const cabinets: Cabinet[] = [
   { establishment: "UFR Santé", identification: "", room: "F106", reference: "15430", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "F106", reference: "15436", type: "Armoire Chimique" },
   { establishment: "UFR Santé", identification: "", room: "F106", reference: "15433", type: "Armoire Chimique" },
-  { establishment: "UFR Santé", identification: "", room: "F106", reference: "15429", type: "Armoire Chimique" }
+  { establishment: "UFR Santé", identification: "", room: "F106", reference: "15429", type: "Armoire Chimique" },
+  // UFR SANTÉ ARMOIRE - HORS BAT SCIENCE 
+   { establishment: "UFR Santé", identification: "", room: "C004", reference: "15431", type: "Armoire Chimique" },
+   { establishment: "UFR Santé", identification: "", room: "C004", reference: "15384", type: "Armoire Chimique" },
+
+  
 
 
 
