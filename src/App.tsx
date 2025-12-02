@@ -27,7 +27,9 @@ export default function App() {
   const [remarks, setRemarks] = useState('');
   const [showCabinetSelector, setShowCabinetSelector] = useState(false);
   const [selectedCabinet, setSelectedCabinet] = useState<Cabinet>(cabinets[0]);
-  const [customIdentification, setCustomIdentification] = useState<string>(cabinets[0].identification);
+  const [customIdentification, setCustomIdentification] = useState<string>(
+    cabinets[0].identification || cabinets[0].reference
+  );
   const [selectedEstablishment, setSelectedEstablishment] = useState<string>('');
   const [selectedType, setSelectedType] = useState<string>('');
   const [showAddEquipmentForm, setShowAddEquipmentForm] = useState(false);
@@ -300,7 +302,7 @@ export default function App() {
 
   const handleCabinetChange = (cabinet: Cabinet) => {
     setSelectedCabinet(cabinet);
-    setCustomIdentification(cabinet.identification);
+    setCustomIdentification(cabinet.identification || cabinet.reference);
     setShowCabinetSelector(false);
     setCroppedImage(null);
   };
@@ -532,7 +534,12 @@ export default function App() {
                 value={selectedEstablishment}
                 onChange={(e) => {
                   setSelectedEstablishment(e.target.value);
-                  const newCabinet = filteredCabinets[0] || cabinets[0];
+                  const filtered = equipmentList.filter(cabinet => {
+                    const matchEstablishment = !e.target.value || cabinet.establishment === e.target.value;
+                    const matchType = !selectedType || cabinet.type === selectedType;
+                    return matchEstablishment && matchType;
+                  });
+                  const newCabinet = filtered[0] || cabinets[0];
                   handleCabinetChange(newCabinet);
                 }}
                 className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -553,7 +560,12 @@ export default function App() {
                 value={selectedType}
                 onChange={(e) => {
                   setSelectedType(e.target.value);
-                  const newCabinet = filteredCabinets[0] || cabinets[0];
+                  const filtered = equipmentList.filter(cabinet => {
+                    const matchEstablishment = !selectedEstablishment || cabinet.establishment === selectedEstablishment;
+                    const matchType = !e.target.value || cabinet.type === e.target.value;
+                    return matchEstablishment && matchType;
+                  });
+                  const newCabinet = filtered[0] || cabinets[0];
                   handleCabinetChange(newCabinet);
                 }}
                 className="w-full px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
