@@ -259,6 +259,7 @@ export function ChemicalCabinetForm({
             )}
           </label>
         </div>
+         <span>Info :</span>
       </div>
     </div>
   );
