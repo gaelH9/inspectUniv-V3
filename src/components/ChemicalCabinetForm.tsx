@@ -104,6 +104,7 @@ export function ChemicalCabinetForm({
   {selectedCabinet.establishment}
 </div>
 
+       {/* News en-tete */}
       <div className="grid grid-cols-2 gap-3 mb-4">
   {/* Date */}
   <div className="relative border rounded-md px-3 py-2 flex items-center justify-between bg-white">
@@ -156,6 +157,7 @@ export function ChemicalCabinetForm({
   </div>
 </div>
 
+       {/* end new en tete */}
 
       <table className="w-full mb-6 border-collapse shadow-sm rounded-lg overflow-hidden">
         <thead>
