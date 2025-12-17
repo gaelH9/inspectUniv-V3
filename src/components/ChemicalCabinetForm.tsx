@@ -96,13 +96,34 @@ export function ChemicalCabinetForm({
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-1 rounded-lg mb-6 font-bold text-xl tracking-wide shadow-sm">
-        ARMOIRE CHIMIQUE
-      </div>
+    <div className="
+  bg-gradient-to-r from-green-600 to-green-700
+  text-white
+  flex items-center justify-center
+  h-9
+  rounded-md
+  mb-3
+  font-bold text-lg
+  leading-none
+  tracking-wide
+">
+  ARMOIRE CHIMIQUE
+</div>
 
-      <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 px-3 rounded-md mb-4 text-sm font-semibold">
+
+<div className="
+  bg-gradient-to-r from-purple-600 to-purple-800
+  text-white
+  flex items-center justify-center
+  h-7
+  rounded-md
+  mb-3
+  text-sm font-medium
+  leading-none
+">
   {selectedCabinet.establishment}
 </div>
+
 
        {/* News en-tete */}
       <div className="grid grid-cols-2 gap-3 mb-4">
