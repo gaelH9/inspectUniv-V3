@@ -103,7 +103,7 @@ export function ChemicalCabinetForm({
           <img
             src={logo}
             alt="Logo"
-            className="h-[190px] object-contain"
+            className="h-[150px] object-contain"
           />
         </div>
       </div>
@@ -313,7 +313,7 @@ export function ChemicalCabinetForm({
 
           <div className="mt-2">
             <div className="font-bold mb-1 text-gray-700 text-[11px]">Identification et VISA Contrôleur:</div>
-            <div className="w-full h-[110px] flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
+            <div className="w-full h-[100px] flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
               <img
                 src={sig1}
                 alt="Signature Contrôleur"
