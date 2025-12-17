@@ -242,67 +242,46 @@ export function ChemicalCabinetForm({
                 </div>
                 <div className="flex-1">
                   <div className="flex">
-                    <div className="flex-1 p-3 pl-6">Mise en dépression de l'enceinte</div>
+                    <div className="flex-1 p-3 pl-6">
+                      <div className="mb-2">Mise en dépression de l'enceinte</div>
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">PSI:</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={psiValue}
+                            onChange={(e) => setPsiValue(e.target.value)}
+                            className="w-20 px-2 py-1 border rounded text-center"
+                            placeholder="0.00"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">Débit:</span>
+                          <input
+                            type="number"
+                            step="0.1"
+                            value={debitValue}
+                            onChange={(e) => setDebitValue(e.target.value)}
+                            className="w-20 px-2 py-1 border rounded text-center"
+                            placeholder="0.0"
+                          />
+                          <select
+                            value={debitUnit}
+                            onChange={(e) => setDebitUnit(e.target.value)}
+                            className="px-2 py-1 border rounded"
+                          >
+                            <option value="m³/h">m³/h</option>
+                            <option value="m/s">m/s</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
                     <div className="w-32 p-3 border-l flex justify-center">
                       {getStatusDisplay(inspectionStatus['mise_en_depression'])}
                     </div>
                   </div>
                 </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table className="w-full mb-6 border-collapse shadow-sm rounded-lg overflow-hidden">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-3 text-left font-bold text-gray-700 border">Critère d'évaluation</th>
-            <th className="p-3 w-32 font-bold text-gray-700 border text-center">Valeur mesurée</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="hover:bg-gray-50">
-            <td className="p-3 border">
-              <div className="flex items-center gap-2">
-                <span>PSI</span>
-              </div>
-            </td>
-            <td className="p-3 border text-center">
-              <input
-                type="number"
-                step="0.01"
-                value={psiValue}
-                onChange={(e) => setPsiValue(e.target.value)}
-                className="w-20 px-2 py-1 border rounded text-center text-sm"
-                placeholder="0.00"
-              />
-            </td>
-          </tr>
-          <tr className="hover:bg-gray-50">
-            <td className="p-3 border">
-              <div className="flex items-center gap-2">
-                <span>Débit (optionnel)</span>
-              </div>
-            </td>
-            <td className="p-3 border text-center">
-              <div className="flex items-center justify-center gap-2">
-                <input
-                  type="number"
-                  step="0.1"
-                  value={debitValue}
-                  onChange={(e) => setDebitValue(e.target.value)}
-                  className="w-20 px-2 py-1 border rounded text-center text-sm"
-                  placeholder="0.0"
-                />
-                <select
-                  value={debitUnit}
-                  onChange={(e) => setDebitUnit(e.target.value)}
-                  className="px-2 py-1 border rounded text-xs"
-                >
-                  <option value="m³/h">m³/h</option>
-                  <option value="m/s">m/s</option>
-                </select>
               </div>
             </td>
           </tr>
