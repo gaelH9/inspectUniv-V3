@@ -208,7 +208,7 @@ export function ChemicalCabinetForm({
 
                           {item.key === 'extracteur' && (
                             <div className="flex items-center gap-2 text-[11px] text-gray-600">
-                              <span className="font-medium">Débit:</span>
+                              <span className="font-medium">Information débit:</span>
                               <input
                                 type="number"
                                 step="0.1"
