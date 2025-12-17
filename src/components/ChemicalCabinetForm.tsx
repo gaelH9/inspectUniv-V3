@@ -100,9 +100,9 @@ export function ChemicalCabinetForm({
         ARMOIRE CHIMIQUE
       </div>
 
-      <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-2 rounded-lg mb-6 font-medium tracking-wide shadow-sm">
-        {selectedCabinet.establishment}
-      </div>
+      <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 px-3 rounded-md mb-4 text-sm font-semibold">
+  {selectedCabinet.establishment}
+</div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
