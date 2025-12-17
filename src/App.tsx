@@ -366,208 +366,178 @@ export default function App() {
   };
 
   const generatePDF = async () => {
-    // ✅ Sécurise le chargement des polices (évite décalages de largeur)
-    try {
-      // @ts-ignore
-      if (document?.fonts?.ready) {
-        // @ts-ignore
-        await document.fonts.ready;
+  // (optionnel) attendre les polices pour réduire les décalages
+  try {
+    // @ts-ignore
+    if (document?.fonts?.ready) await document.fonts.ready;
+  } catch {}
+
+  const element = document.getElementById('inspection-form');
+  if (!element) return;
+
+  const canvas = await html2canvas(element, {
+    backgroundColor: '#ffffff',
+    scale: 2,
+    useCORS: true,
+    allowTaint: true,
+    logging: false,
+    imageTimeout: 15000,
+
+    // ✅ Capture totale du contenu (pas juste la zone visible)
+    width: element.scrollWidth,
+    height: element.scrollHeight,
+
+    // ✅ évite les décalages liés au scroll
+    scrollX: 0,
+    scrollY: -window.scrollY,
+
+    onclone: (clonedDoc) => {
+      const clonedElement = clonedDoc.getElementById('inspection-form') as HTMLElement | null;
+      if (clonedElement) {
+        // ✅ Important: ne PAS bloquer la hauteur à 297mm ici, sinon ça coupe
+        clonedElement.style.height = 'auto';
+        clonedElement.style.minHeight = '0';
+        clonedElement.style.maxHeight = 'none';
+        clonedElement.style.overflow = 'visible';
       }
-    } catch {}
 
-    const element = document.getElementById('inspection-form');
-    if (!element) return;
+      // cache les éléments non voulus dans le PDF
+      clonedDoc.querySelectorAll('.pdf-hide').forEach(el => {
+        (el as HTMLElement).style.display = 'none';
+      });
 
-    // ✅ On capture exactement le bloc A4 (pas le scrollHeight)
-    const rect = element.getBoundingClientRect();
-    const captureWidth = Math.ceil(rect.width);
-    const captureHeight = Math.ceil(rect.height);
+      // ✅ Stabiliser le rendu des inputs/select (html2canvas peut bugger sinon)
+      const replaceWithDiv = (control: HTMLElement, text: string) => {
+        const div = clonedDoc.createElement('div');
+        div.textContent = text;
 
-    const canvas = await html2canvas(element, {
-      backgroundColor: '#ffffff',
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      logging: false,
-      imageTimeout: 15000,
+        div.style.display = 'inline-flex';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'center';
+        div.style.textAlign = 'center';
+        div.style.padding = '4px 8px';
+        div.style.border = '1px solid #d1d5db';
+        div.style.borderRadius = '4px';
+        div.style.backgroundColor = '#fff';
+        div.style.fontSize = '12px';
+        div.style.lineHeight = '1';
+        div.style.minHeight = '28px';
+        div.style.boxSizing = 'border-box';
 
-      // ✅ important: capturer le bloc à l’écran, sans influence du scroll
-      scrollY: -window.scrollY,
-      scrollX: -window.scrollX,
+        // garder largeur approx du champ
+        const rect = control.getBoundingClientRect();
+        if (rect.width) div.style.width = `${Math.ceil(rect.width)}px`;
 
-      // ✅ forcer la taille capturée (A4 dans ton conteneur)
-      width: captureWidth,
-      height: captureHeight,
-      windowWidth: document.documentElement.clientWidth,
-      windowHeight: document.documentElement.clientHeight,
+        control.parentNode?.replaceChild(div, control);
+      };
 
-      onclone: (clonedDoc) => {
-        const clonedElement = clonedDoc.getElementById('inspection-form');
-        if (clonedElement) {
-          // ✅ verrouille le format A4 du clone (évite compressions)
-          clonedElement.style.width = '210mm';
-          clonedElement.style.minWidth = '210mm';
-          clonedElement.style.maxWidth = '210mm';
+      clonedDoc.querySelectorAll('input[type="number"]').forEach((input) => {
+        const i = input as HTMLInputElement;
+        replaceWithDiv(i, i.value?.trim() || '');
+      });
 
-          clonedElement.style.height = '297mm';
-          clonedElement.style.minHeight = '297mm';
-          clonedElement.style.maxHeight = '297mm';
+      clonedDoc.querySelectorAll('select').forEach((select) => {
+        const s = select as HTMLSelectElement;
+        const label = s.options[s.selectedIndex]?.text ?? s.value ?? '';
+        replaceWithDiv(s, label);
+      });
 
-          clonedElement.style.overflow = 'hidden';
-          clonedElement.style.boxSizing = 'border-box';
-        }
-
-        // ✅ cacher les éléments non désirés dans le PDF
-        const hidden = clonedDoc.querySelectorAll('.pdf-hide');
-        hidden.forEach(el => ((el as HTMLElement).style.display = 'none'));
-
-        // ✅ remplacer tous les input number (meilleur rendu)
-        const inputsNumber = clonedDoc.querySelectorAll('input[type="number"]');
-        inputsNumber.forEach(input => {
-          const inputElement = input as HTMLInputElement;
-          const value = inputElement.value?.trim();
-
-          // petit fallback (0.0 / 0.00) selon step si tu veux
-          const step = inputElement.getAttribute('step');
-          const fallback = step === '0.1' ? '0.0' : '0.00';
-
-          replaceControlWithDiv(inputElement, value || fallback);
-        });
-
-        // ✅ remplacer tous les select (source principale de bugs canvas)
-        const selects = clonedDoc.querySelectorAll('select');
-        selects.forEach(select => {
-          const s = select as HTMLSelectElement;
-          const label = s.options[s.selectedIndex]?.text ?? '';
-          replaceControlWithDiv(s, label || (s.value || ''));
-        });
-
-        // ✅ Remarque: textarea -> div
-        const remarksTextarea = clonedDoc.querySelector('textarea');
-        if (remarksTextarea) {
-          const textareaElement = remarksTextarea as HTMLTextAreaElement;
-          const div = document.createElement('div');
-          div.style.whiteSpace = 'pre-wrap';
-          div.style.wordBreak = 'break-word';
-          div.style.width = '100%';
-          div.style.minHeight = '192px';
-          div.style.padding = '0.5rem';
-          div.style.border = '1px dashed #d1d5db';
-          div.style.borderRadius = '0.5rem';
-          div.style.backgroundColor = '#ffffff';
-          div.style.fontSize = '0.875rem';
-          div.textContent = textareaElement.value;
-          textareaElement.parentNode?.replaceChild(div, textareaElement);
-        }
-
-        // ✅ Photo container: garder image recadrée / vider proprement sinon
-        const photoContainer = clonedDoc.querySelector('.photo-container');
-        if (photoContainer) {
-          const containerDiv = photoContainer as HTMLElement;
-
-          if (croppedImage) {
-            containerDiv.style.display = 'flex';
-            containerDiv.style.alignItems = 'center';
-            containerDiv.style.justifyContent = 'center';
-            containerDiv.style.backgroundColor = '#ffffff';
-            containerDiv.style.position = 'relative';
-            containerDiv.style.overflow = 'hidden';
-            containerDiv.style.border = '1px dashed #d1d5db';
-            containerDiv.style.borderRadius = '0.5rem';
-            containerDiv.style.height = '320px';
-
-            const img = photoContainer.querySelector('img');
-            if (img) {
-              const imgElement = img as HTMLImageElement;
-              imgElement.src = croppedImage;
-              imgElement.style.display = 'block';
-              imgElement.style.position = 'relative';
-              imgElement.style.maxWidth = '100%';
-              imgElement.style.maxHeight = '100%';
-              imgElement.style.width = 'auto';
-              imgElement.style.height = 'auto';
-              imgElement.style.objectFit = 'contain';
-              imgElement.style.margin = 'auto';
-            }
-
-            const textElements = photoContainer.querySelectorAll('div:not(.w-full.h-full), p, span');
-            textElements.forEach(el => {
-              const element = el as HTMLElement;
-              if (element && !element.querySelector('img')) {
-                element.style.display = 'none';
-              }
-            });
-          } else {
-            while (containerDiv.firstChild) {
-              containerDiv.removeChild(containerDiv.firstChild);
-            }
-            containerDiv.style.backgroundColor = '#ffffff';
-            containerDiv.style.border = '1px dashed #d1d5db';
-            containerDiv.style.borderRadius = '0.5rem';
-            containerDiv.style.height = '320px';
-          }
-        }
-
-        // ✅ Remplacer les images par base64 (évite CORS/blank)
-        const images = clonedDoc.querySelectorAll('img');
-        images.forEach(img => {
-          if (img.src.includes('logo.png')) {
-            img.src = logoBase64;
-          } else if (img.src.includes('sig1.png')) {
-            img.src = sig1Base64;
-          } else if (img.src.includes('sig2.png')) {
-            img.src = sig2Base64;
-          }
-          img.style.maxWidth = '100%';
-          img.style.maxHeight = '100%';
-          img.style.objectFit = 'contain';
-        });
+      // textarea -> div (meilleur rendu)
+      const remarksTextarea = clonedDoc.querySelector('textarea');
+      if (remarksTextarea) {
+        const ta = remarksTextarea as HTMLTextAreaElement;
+        const div = clonedDoc.createElement('div');
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.wordBreak = 'break-word';
+        div.style.width = '100%';
+        div.style.minHeight = '120px';
+        div.style.padding = '0.5rem';
+        div.style.border = '1px dashed #d1d5db';
+        div.style.borderRadius = '0.5rem';
+        div.style.backgroundColor = '#ffffff';
+        div.style.fontSize = '0.875rem';
+        div.textContent = ta.value;
+        ta.parentNode?.replaceChild(div, ta);
       }
-    });
 
-    const imgData = canvas.toDataURL('image/png', 1.0);
-    const pdf = new jsPDF('p', 'mm', 'a4');
+      // ✅ Remplacer les images par base64 (si tu utilises logoBase64/sigBase64)
+      const images = clonedDoc.querySelectorAll('img');
+      images.forEach((img) => {
+        // si tu as logoBase64 / sig1Base64 / sig2Base64 dans App.tsx
+        // et que ça marche déjà chez toi, garde cette logique :
+        if (img.src.includes('logo.png')) img.src = logoBase64;
+        else if (img.src.includes('sig1.png')) img.src = sig1Base64;
+        else if (img.src.includes('sig2.png')) img.src = sig2Base64;
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();   // 210
-    const pdfHeight = pdf.internal.pageSize.getHeight(); // 297
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '100%';
+        img.style.objectFit = 'contain';
+      });
+    }
+  });
 
-    // ✅ Barre design à gauche (conservée)
-    const sideWidth = 12;
-    pdf.setFillColor(0, 150, 214);
-    pdf.rect(0, 0, sideWidth, pdfHeight, 'F');
+  const imgData = canvas.toDataURL('image/png', 1.0);
 
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
+  // ✅ PDF A4, 1 page unique
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pdfWidth = pdf.internal.pageSize.getWidth();   // 210
+  const pdfHeight = pdf.internal.pageSize.getHeight(); // 297
 
-    // ✅ marges
-    const marginLeft = 14;
-    const marginTop = 5;
-    const marginBottom = 5;
+  // ✅ Ta barre bleue à gauche
+const sideWidth = 14;
 
-    const availableWidth = pdfWidth - sideWidth - marginLeft - 2;
-    const availableHeight = pdfHeight - marginTop - marginBottom;
+pdf.setFillColor(0, 120, 190);
+pdf.rect(0, 0, sideWidth, pdfHeight, 'F');
 
-    // ✅ ratio pour rester dans A4 sans écraser
-    const ratio = Math.min(availableWidth / imgWidth, availableHeight / imgHeight);
+pdf.setFillColor(0, 90, 160);
+pdf.rect(sideWidth - 2, 0, 2, pdfHeight, 'F');
 
-    const finalWidth = imgWidth * ratio;
-    const finalHeight = imgHeight * ratio;
+pdf.setTextColor(255, 255, 255);
+pdf.setFontSize(10);
+pdf.text(
+  selectedCabinet.type.toUpperCase(),
+  sideWidth / 2 + 1,
+  pdfHeight / 2,
+  { angle: 90, align: 'center' }
+);
 
-    const x = sideWidth + marginLeft;
-    const y = marginTop;
 
-    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+  // ✅ Marges
+  const marginLeft = 14;
+  const marginRight = 2;
+  const marginTop = 5;
+  const marginBottom = 5;
 
-    const fileName = `${selectedCabinet.type} - ${customIdentification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
-      .replace(/[/\\?%*:|"<>]/g, '-');
+  const availableWidth = pdfWidth - sideWidth - marginLeft - marginRight;
+  const availableHeight = pdfHeight - marginTop - marginBottom;
 
-    pdf.save(fileName);
+  // ✅ Auto-fit 1 page : on adapte l’échelle pour que TOUT rentre (jamais coupé)
+  const imgWidthPx = canvas.width;
+  const imgHeightPx = canvas.height;
 
-    const equipmentKey = getEquipmentKey(selectedCabinet);
-    setProcessedEquipment(prev => new Set(prev).add(equipmentKey));
+  const ratio = Math.min(
+    availableWidth / imgWidthPx,
+    availableHeight / imgHeightPx
+  );
 
-    resetFormFields();
-  };
+  const finalWidth = imgWidthPx * ratio;
+  const finalHeight = imgHeightPx * ratio;
+
+  // ✅ Aligné en haut (réduit l’impression de “blanc”)
+  const x = sideWidth + marginLeft + (availableWidth - finalWidth) / 2; // tu peux mettre +0 pour aligner gauche
+  const y = marginTop;
+
+  pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+
+  const fileName = `${selectedCabinet.type} - ${customIdentification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
+    .replace(/[/\\?%*:|"<>]/g, '-');
+
+  pdf.save(fileName);
+
+  const equipmentKey = getEquipmentKey(selectedCabinet);
+  setProcessedEquipment(prev => new Set(prev).add(equipmentKey));
+  resetFormFields();
+};
 
 
   // 🔐 Si pas connecté → on affiche la page de login
