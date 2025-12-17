@@ -187,7 +187,7 @@ export function ChemicalCabinetForm({
         <thead>
           <tr className="bg-gray-100">
             <th className="p-2 text-left font-bold text-gray-700 border text-sm">Evaluation état de l'appareillage</th>
-            <th className="p-2 w-40 font-bold text-gray-700 border text-center text-sm">Conformité</th>
+            <th className="p-2 w-44 font-bold text-gray-700 border text-center text-sm">Conformité</th>
           </tr>
         </thead>
 
