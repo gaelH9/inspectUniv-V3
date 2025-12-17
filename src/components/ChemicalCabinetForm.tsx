@@ -97,21 +97,21 @@ export function ChemicalCabinetForm({
 
   return (
     <div>
-      {/* ✅ header compact */}
+      {/* Header */}
       <div className="flex justify-center items-center mb-3 border-b pb-2 pt-1">
         <div className="flex flex-col items-center">
           <img
             src={logo}
             alt="Logo"
-            className="h-19 object-contain"   style={{ height: '190px' }}
+            className="h-[190px] object-contain"
           />
         </div>
       </div>
 
-      {/* ✅ titre plus fin */}
+      {/* Titre */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white
         flex items-center justify-center
-        h-8
+        h-9
         rounded-md
         mb-2
         font-bold text-base
@@ -120,27 +120,24 @@ export function ChemicalCabinetForm({
         ARMOIRE CHIMIQUE
       </div>
 
-      <div className="
-        bg-gradient-to-r from-purple-600 to-purple-800
+      <div className="bg-gradient-to-r from-purple-600 to-purple-800
         text-white
         flex items-center justify-center
-        h-6
+        h-7
         rounded-md
         mb-2
         text-xs font-medium
-        leading-none
-      ">
+        leading-none">
         {selectedCabinet.establishment}
       </div>
 
-      {/* ✅ en-tête compact */}
+      {/* En-tête */}
       <div className="grid grid-cols-2 gap-2 mb-3">
-        <div className="relative border rounded-md px-2 py-1.5 flex items-center justify-between bg-white">
+        <div className="relative border rounded-md px-2 py-2 flex items-center justify-between bg-white">
           <span className="text-[11px] font-semibold text-gray-500">Date</span>
 
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-gray-900">{selectedDate}</span>
-
             <button
               onClick={() => setShowDatePicker(!showDatePicker)}
               className="p-1 hover:bg-gray-100 rounded-md transition-colors print:hidden pdf-hide"
@@ -166,23 +163,23 @@ export function ChemicalCabinetForm({
           )}
         </div>
 
-        <div className="border rounded-md px-2 py-1.5 flex items-center justify-between bg-white">
+        <div className="border rounded-md px-2 py-2 flex items-center justify-between bg-white">
           <span className="text-[11px] font-semibold text-gray-500">Identifiant</span>
           <span className="text-xs font-medium text-gray-900">{customIdentification}</span>
         </div>
 
-        <div className="border rounded-md px-2 py-1.5 flex items-center justify-between bg-white">
+        <div className="border rounded-md px-2 py-2 flex items-center justify-between bg-white">
           <span className="text-[11px] font-semibold text-gray-500">Salle</span>
           <span className="text-xs font-medium text-gray-900">{selectedCabinet.room}</span>
         </div>
 
-        <div className="border rounded-md px-2 py-1.5 flex items-center justify-between bg-white">
+        <div className="border rounded-md px-2 py-2 flex items-center justify-between bg-white">
           <span className="text-[11px] font-semibold text-gray-500">S/N</span>
           <span className="text-xs font-medium text-gray-900">{selectedCabinet.reference}</span>
         </div>
       </div>
 
-      {/* ✅ tableau compact (padding réduit) */}
+      {/* Tableau */}
       <table className="w-full mb-3 border-collapse shadow-sm rounded-lg overflow-hidden">
         <thead>
           <tr className="bg-gray-100">
@@ -192,6 +189,7 @@ export function ChemicalCabinetForm({
         </thead>
 
         <tbody>
+          {/* Fonctionnel */}
           <tr>
             <td className="border" colSpan={2}>
               <div className="flex">
@@ -240,6 +238,7 @@ export function ChemicalCabinetForm({
             </td>
           </tr>
 
+          {/* Structurel */}
           <tr>
             <td className="border" colSpan={2}>
               <div className="flex">
@@ -261,6 +260,7 @@ export function ChemicalCabinetForm({
             </td>
           </tr>
 
+          {/* Sécurité */}
           <tr>
             <td className="border" colSpan={2}>
               <div className="flex">
@@ -296,23 +296,24 @@ export function ChemicalCabinetForm({
               </div>
             </td>
           </tr>
+
         </tbody>
       </table>
 
-      {/* ✅ zone bas compacte */}
+      {/* Bas de page : on utilise l’espace restant */}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <div className="font-bold mb-1 text-gray-700 text-[11px]">Remarque:</div>
           <textarea
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
-            className="w-full h-32 border border-gray-300 rounded-lg p-2 text-xs bg-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+            className="w-full h-40 border border-gray-300 rounded-lg p-2 text-xs bg-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
             style={{ borderStyle: 'dashed' }}
           />
 
           <div className="mt-2">
             <div className="font-bold mb-1 text-gray-700 text-[11px]">Identification et VISA Contrôleur:</div>
-            <div className="w-full h-20 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
+            <div className="w-full h-[110px] flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
               <img
                 src={sig1}
                 alt="Signature Contrôleur"
@@ -337,7 +338,7 @@ export function ChemicalCabinetForm({
 
           <label
             className="photo-container w-full border border-gray-300 rounded-lg flex flex-col items-center justify-center text-gray-400 text-[11px] bg-white cursor-pointer hover:bg-gray-50 transition-all focus:ring-2 focus:ring-blue-500 relative"
-            style={{ borderStyle: 'dashed', height: '250px' }}
+            style={{ borderStyle: 'dashed', height: '300px' }}
           >
             <input
               type="file"
