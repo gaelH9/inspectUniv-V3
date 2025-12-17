@@ -254,12 +254,11 @@ export function ChemicalCabinetForm({
             ) : (
               <div className="text-center p-4">
                 <p className="font-medium">Drop photo here</p>
-                <p className="text-xs mt-1 text-gray-500">or click to select</p>
+                <p className="text-xs mt-1 text-gray-500">or click to select.</p>
               </div>
             )}
           </label>
         </div>
-         <span>Info :</span>
       </div>
     </div>
   );
