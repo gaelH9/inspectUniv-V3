@@ -391,89 +391,129 @@ export default function App() {
     scrollX: 0,
     scrollY: -window.scrollY,
 
-    onclone: (clonedDoc) => {
-      const clonedElement = clonedDoc.getElementById('inspection-form') as HTMLElement | null;
-      if (clonedElement) {
-        // ✅ Important: ne PAS bloquer la hauteur à 297mm ici, sinon ça coupe
-        clonedElement.style.height = 'auto';
-        clonedElement.style.minHeight = '0';
-        clonedElement.style.maxHeight = 'none';
-        clonedElement.style.overflow = 'visible';
-      }
+   onclone: (clonedDoc) => {
+  const clonedElement = clonedDoc.getElementById('inspection-form') as HTMLElement | null;
+  if (clonedElement) {
+    // 🔒 Ne jamais forcer une hauteur A4 ici → sinon coupure
+    clonedElement.style.height = 'auto';
+    clonedElement.style.minHeight = '0';
+    clonedElement.style.maxHeight = 'none';
+    clonedElement.style.overflow = 'visible';
+  }
 
-      // cache les éléments non voulus dans le PDF
-      clonedDoc.querySelectorAll('.pdf-hide').forEach(el => {
-        (el as HTMLElement).style.display = 'none';
-      });
+  /* ------------------------------------------------------------------
+   * 1️⃣ Cacher les éléments inutiles au PDF
+   * ------------------------------------------------------------------ */
+  clonedDoc.querySelectorAll('.pdf-hide').forEach(el => {
+    (el as HTMLElement).style.display = 'none';
+  });
 
-      // ✅ Stabiliser le rendu des inputs/select (html2canvas peut bugger sinon)
-      const replaceWithDiv = (control: HTMLElement, text: string) => {
-        const div = clonedDoc.createElement('div');
-        div.textContent = text;
+  /* ------------------------------------------------------------------
+   * 2️⃣ Inputs / Selects → Divs (rendu stable html2canvas)
+   * ------------------------------------------------------------------ */
+  const replaceWithDiv = (control: HTMLElement, text: string) => {
+    const div = clonedDoc.createElement('div');
+    div.textContent = text;
 
-        div.style.display = 'inline-flex';
-        div.style.alignItems = 'center';
-        div.style.justifyContent = 'center';
-        div.style.textAlign = 'center';
-        div.style.padding = '4px 8px';
-        div.style.border = '1px solid #d1d5db';
-        div.style.borderRadius = '4px';
-        div.style.backgroundColor = '#fff';
-        div.style.fontSize = '12px';
-        div.style.lineHeight = '1';
-        div.style.minHeight = '28px';
-        div.style.boxSizing = 'border-box';
+    div.style.display = 'inline-flex';
+    div.style.alignItems = 'center';
+    div.style.justifyContent = 'center';
+    div.style.textAlign = 'center';
+    div.style.padding = '4px 8px';
+    div.style.border = '1px solid #d1d5db';
+    div.style.borderRadius = '4px';
+    div.style.backgroundColor = '#ffffff';
+    div.style.fontSize = '12px';
+    div.style.lineHeight = '1';
+    div.style.minHeight = '28px';
+    div.style.boxSizing = 'border-box';
 
-        // garder largeur approx du champ
-        const rect = control.getBoundingClientRect();
-        if (rect.width) div.style.width = `${Math.ceil(rect.width)}px`;
-
-        control.parentNode?.replaceChild(div, control);
-      };
-
-      clonedDoc.querySelectorAll('input[type="number"]').forEach((input) => {
-        const i = input as HTMLInputElement;
-        replaceWithDiv(i, i.value?.trim() || '');
-      });
-
-      clonedDoc.querySelectorAll('select').forEach((select) => {
-        const s = select as HTMLSelectElement;
-        const label = s.options[s.selectedIndex]?.text ?? s.value ?? '';
-        replaceWithDiv(s, label);
-      });
-
-      // textarea -> div (meilleur rendu)
-      const remarksTextarea = clonedDoc.querySelector('textarea');
-      if (remarksTextarea) {
-        const ta = remarksTextarea as HTMLTextAreaElement;
-        const div = clonedDoc.createElement('div');
-        div.style.whiteSpace = 'pre-wrap';
-        div.style.wordBreak = 'break-word';
-        div.style.width = '100%';
-        div.style.minHeight = '120px';
-        div.style.padding = '0.5rem';
-        div.style.border = '1px dashed #d1d5db';
-        div.style.borderRadius = '0.5rem';
-        div.style.backgroundColor = '#ffffff';
-        div.style.fontSize = '0.875rem';
-        div.textContent = ta.value;
-        ta.parentNode?.replaceChild(div, ta);
-      }
-
-      // ✅ Remplacer les images par base64 (si tu utilises logoBase64/sigBase64)
-      const images = clonedDoc.querySelectorAll('img');
-      images.forEach((img) => {
-        // si tu as logoBase64 / sig1Base64 / sig2Base64 dans App.tsx
-        // et que ça marche déjà chez toi, garde cette logique :
-        if (img.src.includes('logo.png')) img.src = logoBase64;
-        else if (img.src.includes('sig1.png')) img.src = sig1Base64;
-        else if (img.src.includes('sig2.png')) img.src = sig2Base64;
-
-        img.style.maxWidth = '100%';
-        img.style.maxHeight = '100%';
-        img.style.objectFit = 'contain';
-      });
+    const rect = control.getBoundingClientRect();
+    if (rect.width) {
+      div.style.width = `${Math.ceil(rect.width)}px`;
     }
+
+    control.parentNode?.replaceChild(div, control);
+  };
+
+  clonedDoc.querySelectorAll('input[type="number"]').forEach(input => {
+    const i = input as HTMLInputElement;
+    replaceWithDiv(i, i.value?.trim() || '');
+  });
+
+  clonedDoc.querySelectorAll('select').forEach(select => {
+    const s = select as HTMLSelectElement;
+    const label = s.options[s.selectedIndex]?.text ?? s.value ?? '';
+    replaceWithDiv(s, label);
+  });
+
+  /* ------------------------------------------------------------------
+   * 3️⃣ Textarea → Div (remarque)
+   * ------------------------------------------------------------------ */
+  const remarksTextarea = clonedDoc.querySelector('textarea') as HTMLTextAreaElement | null;
+  if (remarksTextarea) {
+    const div = clonedDoc.createElement('div');
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.wordBreak = 'break-word';
+    div.style.width = '100%';
+    div.style.minHeight = '120px';
+    div.style.padding = '0.5rem';
+    div.style.border = '1px dashed #d1d5db';
+    div.style.borderRadius = '0.5rem';
+    div.style.backgroundColor = '#ffffff';
+    div.style.fontSize = '0.875rem';
+    div.textContent = remarksTextarea.value;
+
+    remarksTextarea.parentNode?.replaceChild(div, remarksTextarea);
+  }
+
+  /* ------------------------------------------------------------------
+   * 4️⃣ Sécuriser les images (logo / signatures)
+   * ------------------------------------------------------------------ */
+  const images = clonedDoc.querySelectorAll('img');
+  images.forEach(img => {
+    // ⚠️ si tu utilises des base64 déjà chargés dans App.tsx
+    if (img.src.includes('logo.png')) img.src = logoBase64;
+    else if (img.src.includes('sig1.png')) img.src = sig1Base64;
+    else if (img.src.includes('sig2.png')) img.src = sig2Base64;
+
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '100%';
+    img.style.objectFit = 'contain';
+  });
+
+  /* ------------------------------------------------------------------
+   * 5️⃣ FIX PHOTO UPLOADÉE → jamais étirée
+   * ------------------------------------------------------------------ */
+  const photoContainer = clonedDoc.querySelector('.photo-container') as HTMLElement | null;
+
+  if (photoContainer) {
+    photoContainer.style.display = 'flex';
+    photoContainer.style.alignItems = 'center';
+    photoContainer.style.justifyContent = 'center';
+    photoContainer.style.overflow = 'hidden';
+    photoContainer.style.backgroundColor = '#ffffff';
+
+    // inner wrapper (si présent)
+    const inner = photoContainer.querySelector('.w-full.h-full') as HTMLElement | null;
+    if (inner) {
+      inner.style.width = '100%';
+      inner.style.height = '100%';
+      inner.style.overflow = 'hidden';
+    }
+
+    // image réelle
+    const img = photoContainer.querySelector('img') as HTMLImageElement | null;
+    if (img) {
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'contain';       // 🔑 conserve le ratio
+      img.style.objectPosition = 'center';
+      img.style.display = 'block';
+    }
+  }
+}
+
   });
 
   const imgData = canvas.toDataURL('image/png', 1.0);
