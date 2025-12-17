@@ -327,7 +327,8 @@ export default function App() {
       etancheite_extraction: 'conforme',
       proprete_extraction: 'conforme',
       test_fumigene: 'conforme',
-      vitesse_air: ''
+      vitesse_air: '',
+      depression: 'conforme'
     });
   };
 
