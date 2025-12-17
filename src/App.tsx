@@ -21,7 +21,7 @@ export default function App() {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem('isAuthenticated') === 'true';
   });
-  //const [selectedDate, setSelectedDate] = useState('11/12/24');
+
   const [selectedDate, setSelectedDate] = useState(formattedDate);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [remarks, setRemarks] = useState('');
@@ -79,29 +79,30 @@ export default function App() {
     const storedList = loadEquipmentList();
     const allEquipment = [...cabinets, ...storedList];
     setEquipmentList(allEquipment);
-    
+
     const { used, total } = getStorageStatus();
     if (used > total * 0.8) {
-      setStorageWarning(`Attention: L'espace de stockage est presque plein (${Math.round(used/total*100)}%)`);
+      setStorageWarning(`Attention: L'espace de stockage est presque plein (${Math.round(used / total * 100)}%)`);
     }
   }, []);
 
-  const establishments = useMemo(() => 
-    Array.from(new Set(equipmentList.map(cabinet => cabinet.establishment))).sort(),
+  const establishments = useMemo(
+    () => Array.from(new Set(equipmentList.map(cabinet => cabinet.establishment))).sort(),
     [equipmentList]
   );
 
-  const deviceTypes = useMemo(() => 
-    Array.from(new Set(equipmentList.map(cabinet => cabinet.type))).sort(),
+  const deviceTypes = useMemo(
+    () => Array.from(new Set(equipmentList.map(cabinet => cabinet.type))).sort(),
     [equipmentList]
   );
 
-  const filteredCabinets = useMemo(() => 
-    equipmentList.filter(cabinet => {
-      const matchEstablishment = !selectedEstablishment || cabinet.establishment === selectedEstablishment;
-      const matchType = !selectedType || cabinet.type === selectedType;
-      return matchEstablishment && matchType;
-    }),
+  const filteredCabinets = useMemo(
+    () =>
+      equipmentList.filter(cabinet => {
+        const matchEstablishment = !selectedEstablishment || cabinet.establishment === selectedEstablishment;
+        const matchType = !selectedType || cabinet.type === selectedType;
+        return matchEstablishment && matchType;
+      }),
     [selectedEstablishment, selectedType, equipmentList]
   );
 
@@ -180,7 +181,7 @@ export default function App() {
       }
     } catch (err) {
       console.error('Erreur accès caméra:', err);
-      alert('Impossible d\'accéder à la caméra');
+      alert("Impossible d'accéder à la caméra");
     }
   };
 
@@ -263,28 +264,29 @@ export default function App() {
   const handleAddEquipment = (newEquipment: Cabinet) => {
     const updatedList = [...equipmentList, newEquipment];
     setEquipmentList(updatedList);
-    
+
     const newEquipments = updatedList.filter(
-      equipment => !cabinets.some(
-        cabinet => 
-          cabinet.establishment === equipment.establishment &&
-          cabinet.identification === equipment.identification &&
-          cabinet.room === equipment.room
-      )
+      equipment =>
+        !cabinets.some(
+          cabinet =>
+            cabinet.establishment === equipment.establishment &&
+            cabinet.identification === equipment.identification &&
+            cabinet.room === equipment.room
+        )
     );
-    
+
     const saved = saveEquipmentList(newEquipments);
     if (!saved) {
       console.error('Erreur lors de la sauvegarde dans le localStorage');
-      alert('Erreur lors de la sauvegarde. Vérifiez l\'espace de stockage disponible.');
+      alert("Erreur lors de la sauvegarde. Vérifiez l'espace de stockage disponible.");
       return;
     }
 
     const { used, total } = getStorageStatus();
     if (used > total * 0.8) {
-      setStorageWarning(`Attention: L'espace de stockage est presque plein (${Math.round(used/total*100)}%)`);
+      setStorageWarning(`Attention: L'espace de stockage est presque plein (${Math.round(used / total * 100)}%)`);
     }
-    
+
     setShowAddEquipmentForm(false);
   };
 
@@ -337,47 +339,110 @@ export default function App() {
     return `${cabinet.establishment}-${cabinet.room}-${cabinet.type}-${cabinet.identification}`;
   };
 
+  // ✅ Helper: remplace un input/select par une div stylée (meilleur rendu canvas/PDF)
+  const replaceControlWithDiv = (control: HTMLElement, text: string) => {
+    const div = document.createElement('div');
+    div.textContent = text;
+
+    // Style "proche" des inputs tailwind (simple et robuste pour html2canvas)
+    div.style.display = 'inline-flex';
+    div.style.alignItems = 'center';
+    div.style.justifyContent = 'center';
+    div.style.textAlign = 'center';
+    div.style.padding = '4px 8px';
+    div.style.border = '1px solid #d1d5db';
+    div.style.borderRadius = '0.25rem';
+    div.style.backgroundColor = '#ffffff';
+    div.style.fontSize = '12px';
+    div.style.lineHeight = '1';
+    div.style.minHeight = '28px';
+    div.style.boxSizing = 'border-box';
+
+    // Conserver à peu près la largeur visible du control original
+    const rect = control.getBoundingClientRect();
+    if (rect.width) div.style.width = `${Math.ceil(rect.width)}px`;
+
+    control.parentNode?.replaceChild(div, control);
+  };
+
   const generatePDF = async () => {
-    //if (!imagesLoaded) { alert('Veuillez patienter pendant le chargement des images...');  return; -> Off  }
+    // ✅ Sécurise le chargement des polices (évite décalages de largeur)
+    try {
+      // @ts-ignore
+      if (document?.fonts?.ready) {
+        // @ts-ignore
+        await document.fonts.ready;
+      }
+    } catch {}
 
     const element = document.getElementById('inspection-form');
     if (!element) return;
+
+    // ✅ On capture exactement le bloc A4 (pas le scrollHeight)
+    const rect = element.getBoundingClientRect();
+    const captureWidth = Math.ceil(rect.width);
+    const captureHeight = Math.ceil(rect.height);
 
     const canvas = await html2canvas(element, {
       backgroundColor: '#ffffff',
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      logging: true,
-      imageTimeout: 0,
-      scrollY: 0,
-      scrollX: 0,
-      windowHeight: element.scrollHeight,
+      logging: false,
+      imageTimeout: 15000,
+
+      // ✅ important: capturer le bloc à l’écran, sans influence du scroll
+      scrollY: -window.scrollY,
+      scrollX: -window.scrollX,
+
+      // ✅ forcer la taille capturée (A4 dans ton conteneur)
+      width: captureWidth,
+      height: captureHeight,
+      windowWidth: document.documentElement.clientWidth,
+      windowHeight: document.documentElement.clientHeight,
+
       onclone: (clonedDoc) => {
         const clonedElement = clonedDoc.getElementById('inspection-form');
         if (clonedElement) {
-          clonedElement.style.minHeight = 'auto';
-          clonedElement.style.height = 'auto';
+          // ✅ verrouille le format A4 du clone (évite compressions)
+          clonedElement.style.width = '210mm';
+          clonedElement.style.minWidth = '210mm';
+          clonedElement.style.maxWidth = '210mm';
+
+          clonedElement.style.height = '297mm';
+          clonedElement.style.minHeight = '297mm';
+          clonedElement.style.maxHeight = '297mm';
+
+          clonedElement.style.overflow = 'hidden';
+          clonedElement.style.boxSizing = 'border-box';
         }
 
-        const calendarButtons = clonedDoc.querySelectorAll('.pdf-hide');
-        calendarButtons.forEach(button => {
-          (button as HTMLElement).style.display = 'none';
-        });
+        // ✅ cacher les éléments non désirés dans le PDF
+        const hidden = clonedDoc.querySelectorAll('.pdf-hide');
+        hidden.forEach(el => ((el as HTMLElement).style.display = 'none'));
 
-        const inputs = clonedDoc.querySelectorAll('input[type="number"]');
-        inputs.forEach(input => {
+        // ✅ remplacer tous les input number (meilleur rendu)
+        const inputsNumber = clonedDoc.querySelectorAll('input[type="number"]');
+        inputsNumber.forEach(input => {
           const inputElement = input as HTMLInputElement;
-          const value = inputElement.value;
-          const div = document.createElement('div');
-          div.textContent = value || '0.00';
-          div.style.textAlign = 'center';
-          div.style.padding = '4px';
-          div.style.border = '1px solid #d1d5db';
-          div.style.borderRadius = '0.25rem';
-          inputElement.parentNode?.replaceChild(div, inputElement);
+          const value = inputElement.value?.trim();
+
+          // petit fallback (0.0 / 0.00) selon step si tu veux
+          const step = inputElement.getAttribute('step');
+          const fallback = step === '0.1' ? '0.0' : '0.00';
+
+          replaceControlWithDiv(inputElement, value || fallback);
         });
 
+        // ✅ remplacer tous les select (source principale de bugs canvas)
+        const selects = clonedDoc.querySelectorAll('select');
+        selects.forEach(select => {
+          const s = select as HTMLSelectElement;
+          const label = s.options[s.selectedIndex]?.text ?? '';
+          replaceControlWithDiv(s, label || (s.value || ''));
+        });
+
+        // ✅ Remarque: textarea -> div
         const remarksTextarea = clonedDoc.querySelector('textarea');
         if (remarksTextarea) {
           const textareaElement = remarksTextarea as HTMLTextAreaElement;
@@ -395,6 +460,7 @@ export default function App() {
           textareaElement.parentNode?.replaceChild(div, textareaElement);
         }
 
+        // ✅ Photo container: garder image recadrée / vider proprement sinon
         const photoContainer = clonedDoc.querySelector('.photo-container');
         if (photoContainer) {
           const containerDiv = photoContainer as HTMLElement;
@@ -442,6 +508,7 @@ export default function App() {
           }
         }
 
+        // ✅ Remplacer les images par base64 (évite CORS/blank)
         const images = clonedDoc.querySelectorAll('img');
         images.forEach(img => {
           if (img.src.includes('logo.png')) {
@@ -458,38 +525,43 @@ export default function App() {
       }
     });
 
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL('image/png', 1.0);
     const pdf = new jsPDF('p', 'mm', 'a4');
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const pdfWidth = pdf.internal.pageSize.getWidth();   // 210
+    const pdfHeight = pdf.internal.pageSize.getHeight(); // 297
 
+    // ✅ Barre design à gauche (conservée)
     const sideWidth = 12;
-
     pdf.setFillColor(0, 150, 214);
     pdf.rect(0, 0, sideWidth, pdfHeight, 'F');
 
     const imgWidth = canvas.width;
     const imgHeight = canvas.height;
 
+    // ✅ marges
     const marginLeft = 14;
     const marginTop = 5;
     const marginBottom = 5;
+
     const availableWidth = pdfWidth - sideWidth - marginLeft - 2;
     const availableHeight = pdfHeight - marginTop - marginBottom;
 
-    const ratio = Math.min(
-      availableWidth / imgWidth,
-      availableHeight / imgHeight
-    );
+    // ✅ ratio pour rester dans A4 sans écraser
+   const ratio = Math.min(
+  availableWidth / imgWidth,
+  availableHeight / imgHeight
+);
 
-    const finalWidth = imgWidth * ratio;
-    const finalHeight = imgHeight * ratio;
 
-    const x = sideWidth + marginLeft;
-    const y = marginTop;
+  const finalWidth = imgWidth * ratio;
+const finalHeight = imgHeight * ratio;
 
-    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+// ✅ centrage dans la zone imprimable à droite de la barre bleue
+const x = sideWidth + marginLeft + (availableWidth - finalWidth) / 2;
+const y = marginTop + (availableHeight - finalHeight) / 2;
+
+pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 
     const fileName = `${selectedCabinet.type} - ${customIdentification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
       .replace(/[/\\?%*:|"<>]/g, '-');
@@ -586,35 +658,37 @@ export default function App() {
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <span className="text-xs sm:text-sm font-bold text-gray-700">Sélectionner un équipement:</span>
               <div className="flex-1 relative">
-              <button
-                onClick={() => setShowCabinetSelector(!showCabinetSelector)}
-                className="w-full flex items-center justify-between gap-2 px-2 sm:px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border"
-              >
-                <span className="text-xs sm:text-sm truncate">
-                  {`${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedCabinet.type} - ${selectedCabinet.identification}`}
-                </span>
-                <ChevronDown size={16} className="text-gray-600 flex-shrink-0" />
-              </button>
-              {showCabinetSelector && (
-                <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-lg shadow-xl border p-1 z-10 max-h-60 overflow-y-auto">
-                  {filteredCabinets.map((cabinet, index) => {
-                    const equipmentKey = getEquipmentKey(cabinet);
-                    const isProcessed = processedEquipment.has(equipmentKey);
-                    return (
-                      <button
-                        key={index}
-                        onClick={() => handleCabinetChange(cabinet)}
-                        className={`w-full text-left px-2 py-1.5 hover:bg-gray-100 rounded text-xs sm:text-sm transition-colors ${
-                          isProcessed ? 'bg-green-100 hover:bg-green-200' : ''
-                        }`}
-                      >
-                        {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification}`}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+                <button
+                  onClick={() => setShowCabinetSelector(!showCabinetSelector)}
+                  className="w-full flex items-center justify-between gap-2 px-2 sm:px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border"
+                >
+                  <span className="text-xs sm:text-sm truncate">
+                    {`${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedCabinet.type} - ${selectedCabinet.identification}`}
+                  </span>
+                  <ChevronDown size={16} className="text-gray-600 flex-shrink-0" />
+                </button>
+
+                {showCabinetSelector && (
+                  <div className="absolute top-full left-0 mt-1 w-full bg-white rounded-lg shadow-xl border p-1 z-10 max-h-60 overflow-y-auto">
+                    {filteredCabinets.map((cabinet, index) => {
+                      const equipmentKey = getEquipmentKey(cabinet);
+                      const isProcessed = processedEquipment.has(equipmentKey);
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleCabinetChange(cabinet)}
+                          className={`w-full text-left px-2 py-1.5 hover:bg-gray-100 rounded text-xs sm:text-sm transition-colors ${
+                            isProcessed ? 'bg-green-100 hover:bg-green-200' : ''
+                          }`}
+                        >
+                          {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification}`}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
+
               <button
                 onClick={() => setShowAddEquipmentForm(true)}
                 className="px-2 sm:px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
@@ -623,6 +697,7 @@ export default function App() {
                 <span className="text-xs sm:text-sm font-medium">Ajouter</span>
               </button>
             </div>
+
             <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <span className="text-xs sm:text-sm font-bold text-gray-700 min-w-fit">Identifiant personnalisé:</span>
               <input
@@ -658,60 +733,64 @@ export default function App() {
         </div>
 
         <div className="overflow-x-auto">
-          <div className="bg-white rounded-lg shadow p-3 sm:p-6 lg:p-6 min-w-[210mm]" id="inspection-form" style={{ minHeight: '297mm', width: '210mm' }}>
-          {selectedCabinet.type === 'Armoire Chimique' ? (
-            <ChemicalCabinetForm
-              selectedCabinet={selectedCabinet}
-              customIdentification={customIdentification}
-              selectedDate={selectedDate}
-              showDatePicker={showDatePicker}
-              setShowDatePicker={setShowDatePicker}
-              setSelectedDate={setSelectedDate}
-              inspectionStatus={inspectionStatus}
-              handleStatusChange={handleStatusChange}
-              remarks={remarks}
-              setRemarks={setRemarks}
-              croppedImage={croppedImage}
-              handleImageUpload={handleImageUpload}
-              handleCameraCapture={handleCameraCapture}
-            />
-          ) : selectedCabinet.type === 'Sorbonne' ? (
-            <SorbonneForm
-              selectedCabinet={selectedCabinet}
-              customIdentification={customIdentification}
-              selectedDate={selectedDate}
-              showDatePicker={showDatePicker}
-              setShowDatePicker={setShowDatePicker}
-              setSelectedDate={setSelectedDate}
-              inspectionStatus={inspectionStatus}
-              handleStatusChange={handleStatusChange}
-              remarks={remarks}
-              setRemarks={setRemarks}
-              croppedImage={croppedImage}
-              handleImageUpload={handleImageUpload}
-              handleCameraCapture={handleCameraCapture}
-            />
-          ) : selectedCabinet.type === 'Hotte' ? (
-            <HotteForm
-              selectedCabinet={selectedCabinet}
-              customIdentification={customIdentification}
-              selectedDate={selectedDate}
-              showDatePicker={showDatePicker}
-              setShowDatePicker={setShowDatePicker}
-              setSelectedDate={setSelectedDate}
-              inspectionStatus={inspectionStatus}
-              handleStatusChange={handleStatusChange}
-              remarks={remarks}
-              setRemarks={setRemarks}
-              croppedImage={croppedImage}
-              handleImageUpload={handleImageUpload}
-              handleCameraCapture={handleCameraCapture}
-            />
-          ) : selectedCabinet.type === 'PSM' ? (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              Fiche PSM en cours de développement
-            </div>
-          ) : null}
+          <div
+            className="bg-white rounded-lg shadow p-3 sm:p-6 lg:p-6 min-w-[210mm]"
+            id="inspection-form"
+            style={{ minHeight: '297mm', width: '210mm' }}
+          >
+            {selectedCabinet.type === 'Armoire Chimique' ? (
+              <ChemicalCabinetForm
+                selectedCabinet={selectedCabinet}
+                customIdentification={customIdentification}
+                selectedDate={selectedDate}
+                showDatePicker={showDatePicker}
+                setShowDatePicker={setShowDatePicker}
+                setSelectedDate={setSelectedDate}
+                inspectionStatus={inspectionStatus}
+                handleStatusChange={handleStatusChange}
+                remarks={remarks}
+                setRemarks={setRemarks}
+                croppedImage={croppedImage}
+                handleImageUpload={handleImageUpload}
+                handleCameraCapture={handleCameraCapture}
+              />
+            ) : selectedCabinet.type === 'Sorbonne' ? (
+              <SorbonneForm
+                selectedCabinet={selectedCabinet}
+                customIdentification={customIdentification}
+                selectedDate={selectedDate}
+                showDatePicker={showDatePicker}
+                setShowDatePicker={setShowDatePicker}
+                setSelectedDate={setSelectedDate}
+                inspectionStatus={inspectionStatus}
+                handleStatusChange={handleStatusChange}
+                remarks={remarks}
+                setRemarks={setRemarks}
+                croppedImage={croppedImage}
+                handleImageUpload={handleImageUpload}
+                handleCameraCapture={handleCameraCapture}
+              />
+            ) : selectedCabinet.type === 'Hotte' ? (
+              <HotteForm
+                selectedCabinet={selectedCabinet}
+                customIdentification={customIdentification}
+                selectedDate={selectedDate}
+                showDatePicker={showDatePicker}
+                setShowDatePicker={setShowDatePicker}
+                setSelectedDate={setSelectedDate}
+                inspectionStatus={inspectionStatus}
+                handleStatusChange={handleStatusChange}
+                remarks={remarks}
+                setRemarks={setRemarks}
+                croppedImage={croppedImage}
+                handleImageUpload={handleImageUpload}
+                handleCameraCapture={handleCameraCapture}
+              />
+            ) : selectedCabinet.type === 'PSM' ? (
+              <div className="flex items-center justify-center h-full text-gray-500">
+                Fiche PSM en cours de développement
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -741,12 +820,7 @@ export default function App() {
           <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-2 sm:mx-4 p-3 sm:p-6">
             <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-gray-800">Prendre une photo</h3>
             <div className="max-h-[70vh] overflow-auto mb-3 sm:mb-4">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                className="w-full rounded-lg"
-              />
+              <video ref={videoRef} autoPlay playsInline className="w-full rounded-lg" />
             </div>
             <div className="flex justify-end gap-2 sm:gap-3">
               <button
@@ -774,11 +848,7 @@ export default function App() {
           <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-2 sm:mx-4 p-3 sm:p-6">
             <h3 className="text-base sm:text-lg font-bold mb-3 sm:mb-4 text-gray-800">Recadrer l'image</h3>
             <div className="max-h-[70vh] overflow-auto mb-3 sm:mb-4">
-              <ReactCrop
-                crop={crop}
-                onChange={c => setCrop(c)}
-                className="max-w-full mx-auto"
-              >
+              <ReactCrop crop={crop} onChange={c => setCrop(c)} className="max-w-full mx-auto">
                 <img
                   ref={imageRef}
                   src={uploadedImage}
