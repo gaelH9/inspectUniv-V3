@@ -96,20 +96,16 @@ export function ChemicalCabinetForm({
         </div>
       </div>
 
-    <div className="
-  bg-gradient-to-r from-green-600 to-green-700
-  text-white
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white
   flex items-center justify-center
   h-9
   rounded-md
   mb-3
   font-bold text-lg
   leading-none
-  tracking-wide
-">
-  ARMOIRE CHIMIQUE
-</div>
-
+  tracking-wide">
+        ARMOIRE CHIMIQUE
+      </div>
 
 <div className="
   bg-gradient-to-r from-purple-600 to-purple-800
