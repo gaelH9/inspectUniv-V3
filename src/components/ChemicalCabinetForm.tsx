@@ -206,31 +206,8 @@ export function ChemicalCabinetForm({
                   {functionalItems.map((item) => (
                     <div key={item.key} className="flex border-b last:border-b-0">
                       <div className="flex-1 p-3 pl-6">{item.label}</div>
-                      <div className="flex items-center gap-2 p-3 border-l">
-                        <div className="flex justify-center">
-                          {getStatusDisplay(inspectionStatus[item.key])}
-                        </div>
-                        {item.key === 'extracteur' && (
-                          <div className="flex items-center gap-1 ml-2">
-                            <input
-                              type="number"
-                              step="0.1"
-                              value={debitValue}
-                              onChange={(e) => setDebitValue(e.target.value)}
-                              className="px-2 py-1 border rounded text-center"
-                              style={{ minWidth: '50px', maxWidth: '50px', width: '50px' }}
-                              placeholder="0.0"
-                            />
-                            <select
-                              value={debitUnit}
-                              onChange={(e) => setDebitUnit(e.target.value)}
-                              className="px-1 py-1 border rounded text-xs"
-                            >
-                              <option value="m³/h">m³/h</option>
-                              <option value="m/s">m/s</option>
-                            </select>
-                          </div>
-                        )}
+                      <div className="w-32 p-3 border-l flex justify-center">
+                        {getStatusDisplay(inspectionStatus[item.key])}
                       </div>
                     </div>
                   ))}
@@ -264,24 +241,44 @@ export function ChemicalCabinetForm({
                   <div className="font-bold text-blue-800">Principe de sécurité</div>
                 </div>
                 <div className="flex-1">
-                  <div className="flex border-b-0">
-                    <div className="flex-1 p-3 pl-6">Mise en dépression de l'enceinte</div>
-                    <div className="flex items-center gap-2 p-3 border-l">
-                      <div className="flex justify-center">
-                        {getStatusDisplay(inspectionStatus['depression'])}
+                  <div className="flex">
+                    <div className="flex-1 p-3 pl-6">
+                      <div className="mb-2">Mise en dépression de l'enceinte</div>
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">PSI:</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={psiValue}
+                            onChange={(e) => setPsiValue(e.target.value)}
+                            className="w-20 px-2 py-1 border rounded text-center"
+                            placeholder="0.00"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">Débit:</span>
+                          <input
+                            type="number"
+                            step="0.1"
+                            value={debitValue}
+                            onChange={(e) => setDebitValue(e.target.value)}
+                            className="w-20 px-2 py-1 border rounded text-center"
+                            placeholder="0.0"
+                          />
+                          <select
+                            value={debitUnit}
+                            onChange={(e) => setDebitUnit(e.target.value)}
+                            className="px-2 py-1 border rounded"
+                          >
+                            <option value="m³/h">m³/h</option>
+                            <option value="m/s">m/s</option>
+                          </select>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 ml-2">
-                        <span className="text-xs font-medium text-gray-600">PSI:</span>
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={psiValue}
-                          onChange={(e) => setPsiValue(e.target.value)}
-                          className="px-2 py-1 border rounded text-center"
-                          style={{ minWidth: '50px', maxWidth: '50px', width: '50px' }}
-                          placeholder="0.00"
-                        />
-                      </div>
+                    </div>
+                    <div className="w-32 p-3 border-l flex justify-center">
+                      {getStatusDisplay(inspectionStatus['depression'])}
                     </div>
                   </div>
                 </div>
