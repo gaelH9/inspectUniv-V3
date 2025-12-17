@@ -92,8 +92,7 @@ export function ChemicalCabinetForm({
     { key: 'portes', label: 'Portes' },
     { key: 'interieur', label: 'Intérieur' },
     { key: 'exterieur', label: 'Extérieur' },
-    { key: 'etancheite', label: 'Etanchéité enceinte' },
-    { key: 'depression', label: 'Mise en dépression de l\'enceinte' }
+    { key: 'etancheite', label: 'Etanchéité enceinte' }
   ];
 
   return (
@@ -279,7 +278,7 @@ export function ChemicalCabinetForm({
                       </div>
                     </div>
                     <div className="w-32 p-3 border-l flex justify-center">
-                      {getStatusDisplay(inspectionStatus['mise_en_depression'])}
+                      {getStatusDisplay(inspectionStatus['depression'])}
                     </div>
                   </div>
                 </div>
