@@ -98,12 +98,12 @@ export function ChemicalCabinetForm({
   return (
     <div>
       {/* ✅ header compact */}
-      <div className="flex justify-center items-center mb-3 border-b pb-2">
+      <div className="flex justify-center items-center mb-3 border-b pb-2 pt-1">
         <div className="flex flex-col items-center">
           <img
             src={logo}
             alt="Logo"
-            className="h-16 object-contain"
+            className="h-22 object-contain"
           />
         </div>
       </div>
@@ -312,11 +312,11 @@ export function ChemicalCabinetForm({
 
           <div className="mt-2">
             <div className="font-bold mb-1 text-gray-700 text-[11px]">Identification et VISA Contrôleur:</div>
-            <div className="w-full h-16 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
+            <div className="w-full h-20 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
               <img
                 src={sig1}
                 alt="Signature Contrôleur"
-                className="max-h-full object-contain p-2"
+                className="h-full object-contain p-2"
               />
             </div>
           </div>
