@@ -401,13 +401,6 @@ export default function App() {
       windowWidth: document.documentElement.clientWidth,
       windowHeight: document.documentElement.clientHeight,
 
-        width: element.offsetWidth,
-        height: element.scrollHeight,
-
-      scrollX: 0,
-      scrollY: -window.scrollY,
-
-
       onclone: (clonedDoc) => {
         const clonedElement = clonedDoc.getElementById('inspection-form');
         if (clonedElement) {
@@ -555,20 +548,15 @@ export default function App() {
     const availableHeight = pdfHeight - marginTop - marginBottom;
 
     // ✅ ratio pour rester dans A4 sans écraser
-   const ratio = Math.min(
-  availableWidth / imgWidth,
-  availableHeight / imgHeight
-);
+    const ratio = Math.min(availableWidth / imgWidth, availableHeight / imgHeight);
 
+    const finalWidth = imgWidth * ratio;
+    const finalHeight = imgHeight * ratio;
 
-  const finalWidth = imgWidth * ratio;
-const finalHeight = imgHeight * ratio;
+    const x = sideWidth + marginLeft;
+    const y = marginTop;
 
-// ✅ centrage dans la zone imprimable à droite de la barre bleue
-const x = sideWidth + marginLeft + (availableWidth - finalWidth) / 2;
-const y = marginTop; // ✅ aligné en haut
-
-pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+    pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 
     const fileName = `${selectedCabinet.type} - ${customIdentification} - ${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedDate}.pdf`
       .replace(/[/\\?%*:|"<>]/g, '-');
@@ -580,6 +568,7 @@ pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 
     resetFormFields();
   };
+
 
   // 🔐 Si pas connecté → on affiche la page de login
   if (!isLoggedIn) {
