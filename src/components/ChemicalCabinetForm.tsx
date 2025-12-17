@@ -103,7 +103,7 @@ export function ChemicalCabinetForm({
           <img
             src={logo}
             alt="Logo"
-            className="h-19 object-contain" style="height : 190px"
+            className="h-19 object-contain"   style={{ height: '190px' }}
           />
         </div>
       </div>
