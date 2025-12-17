@@ -131,7 +131,7 @@ export function ChemicalCabinetForm({
             )}
           </div>
         </div>
-        <div className="border rounded-lg p-3 flex items-center bg-gray-50 shadow-sm">
+        <div className="border rounded-lg p-1 flex items-center bg-gray-50 shadow-sm">
           <span className="text-sm font-bold min-w-24 text-gray-700">Identifiant:</span>
           <span className="text-sm flex-1 px-2">{customIdentification}</span>
         </div>
