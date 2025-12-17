@@ -274,9 +274,10 @@ export function ChemicalCabinetForm({
           </label>
         </div>
          </div>
-          <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 px-3 rounded-md mb-4 text-sm font-semibold">
-                {selectedCabinet.establishment}
-          </div>
+        <div className="mt-4 text-[11px] italic text-gray-400">
+  Cette évaluation porte sur l’état général et le bon fonctionnement de l’armoire chimique.
+  Elle ne constitue pas une qualification normative avec critères métrologiques.
+</div>
      
     </div>
   );
