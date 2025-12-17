@@ -104,46 +104,58 @@ export function ChemicalCabinetForm({
   {selectedCabinet.establishment}
 </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
-          <span className="text-sm font-bold min-w-24 text-gray-700">Date:</span>
-          <div className="flex-1 flex items-center gap-2">
-            <span className="text-sm px-2">{selectedDate}</span>
-            <button
-              onClick={() => setShowDatePicker(!showDatePicker)}
-              className="p-1 hover:bg-gray-200 rounded-md transition-colors print:hidden pdf-hide"
-            >
-              <Calendar size={18} className="text-gray-600" />
-            </button>
-            {showDatePicker && (
-              <div className="absolute mt-2 bg-white rounded-lg shadow-xl border p-2 z-10">
-                <input
-                  type="date"
-                  onChange={(e) => {
-                    const date = new Date(e.target.value);
-                    const formattedDate = date.toLocaleDateString('fr-FR');
-                    setSelectedDate(formattedDate);
-                    setShowDatePicker(false);
-                  }}
-                  className="p-2 border rounded-md"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="border rounded-lg p-1 flex items-center bg-gray-50 shadow-sm">
-          <span className="text-sm font-bold min-w-24 text-gray-700">Identifiant:</span>
-          <span className="text-sm flex-1 px-2">{customIdentification}</span>
-        </div>
-        <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
-          <span className="text-sm font-bold min-w-24 text-gray-700">Salle:</span>
-          <span className="text-sm flex-1 px-2">{selectedCabinet.room}</span>
-        </div>
-        <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
-          <span className="text-sm font-bold min-w-24 text-gray-700">S/N:</span>
-          <span className="text-sm flex-1 px-2">{selectedCabinet.reference}</span>
-        </div>
+      <div className="grid grid-cols-2 gap-3 mb-4">
+  {/* Date */}
+  <div className="relative border rounded-md px-3 py-2 flex items-center justify-between bg-white">
+    <span className="text-xs font-semibold text-gray-500">Date</span>
+
+    <div className="flex items-center gap-2">
+      <span className="text-sm font-medium text-gray-900">{selectedDate}</span>
+
+      <button
+        onClick={() => setShowDatePicker(!showDatePicker)}
+        className="p-1 hover:bg-gray-100 rounded-md transition-colors print:hidden pdf-hide"
+        aria-label="Choisir une date"
+      >
+        <Calendar size={16} className="text-gray-500" />
+      </button>
+    </div>
+
+    {showDatePicker && (
+      <div className="absolute right-2 top-full mt-2 bg-white rounded-md shadow-lg border p-2 z-10 print:hidden pdf-hide">
+        <input
+          type="date"
+          onChange={(e) => {
+            const date = new Date(e.target.value);
+            const formattedDate = date.toLocaleDateString("fr-FR");
+            setSelectedDate(formattedDate);
+            setShowDatePicker(false);
+          }}
+          className="px-2 py-1 border rounded-md text-sm"
+        />
       </div>
+    )}
+  </div>
+
+  {/* Identifiant */}
+  <div className="border rounded-md px-3 py-2 flex items-center justify-between bg-white">
+    <span className="text-xs font-semibold text-gray-500">Identifiant</span>
+    <span className="text-sm font-medium text-gray-900">{customIdentification}</span>
+  </div>
+
+  {/* Salle */}
+  <div className="border rounded-md px-3 py-2 flex items-center justify-between bg-white">
+    <span className="text-xs font-semibold text-gray-500">Salle</span>
+    <span className="text-sm font-medium text-gray-900">{selectedCabinet.room}</span>
+  </div>
+
+  {/* S/N */}
+  <div className="border rounded-md px-3 py-2 flex items-center justify-between bg-white">
+    <span className="text-xs font-semibold text-gray-500">S/N</span>
+    <span className="text-sm font-medium text-gray-900">{selectedCabinet.reference}</span>
+  </div>
+</div>
+
 
       <table className="w-full mb-6 border-collapse shadow-sm rounded-lg overflow-hidden">
         <thead>
