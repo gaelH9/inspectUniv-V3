@@ -273,10 +273,11 @@ export function ChemicalCabinetForm({
             )}
           </label>
         </div>
+         </div>
           <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 px-3 rounded-md mb-4 text-sm font-semibold">
                 {selectedCabinet.establishment}
           </div>
-      </div>
+     
     </div>
   );
 }
