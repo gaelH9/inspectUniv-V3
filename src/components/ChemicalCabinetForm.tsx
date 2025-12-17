@@ -97,7 +97,7 @@ export function ChemicalCabinetForm({
       </div>
 
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-1 rounded-lg mb-6 font-bold text-xl tracking-wide shadow-sm">
-        ARMOIRE CHIMIQUE-1
+        ARMOIRE CHIMIQUE
       </div>
 
       <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 px-3 rounded-md mb-4 text-sm font-semibold">
@@ -131,7 +131,7 @@ export function ChemicalCabinetForm({
             )}
           </div>
         </div>
-        <div className="border rounded-lg p-4 flex items-center bg-gray-50 shadow-sm">
+        <div className="border rounded-lg p-3 flex items-center bg-gray-50 shadow-sm">
           <span className="text-sm font-bold min-w-24 text-gray-700">Identifiant:</span>
           <span className="text-sm flex-1 px-2">{customIdentification}</span>
         </div>
