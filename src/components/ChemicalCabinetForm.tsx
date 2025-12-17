@@ -275,7 +275,7 @@ export function ChemicalCabinetForm({
         </div>
          </div>
         <div className="mt-4 text-[11px] italic text-gray-400">
- Cette évaluation porte sur l’état général et le fonctionnement de l’armoire chimique et ne constitue pas une qualification normative à critères métrologiques.
+ Cette évaluation porte sur l’état général et le fonctionnement de l’armoire chimique et ne constitue pas une qualification normative à critères métrologiques. 
 
 </div>
      
