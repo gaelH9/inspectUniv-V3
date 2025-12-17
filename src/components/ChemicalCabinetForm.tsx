@@ -92,7 +92,8 @@ export function ChemicalCabinetForm({
     { key: 'portes', label: 'Portes' },
     { key: 'interieur', label: 'Intérieur' },
     { key: 'exterieur', label: 'Extérieur' },
-    { key: 'etancheite', label: 'Etanchéité enceinte' }
+    { key: 'etancheite', label: 'Etanchéité enceinte' },
+    { key: 'depression', label: 'Mise en dépression de l\'enceinte' }
   ];
 
   return (
