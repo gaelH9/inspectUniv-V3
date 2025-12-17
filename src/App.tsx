@@ -401,6 +401,13 @@ export default function App() {
       windowWidth: document.documentElement.clientWidth,
       windowHeight: document.documentElement.clientHeight,
 
+        width: element.offsetWidth,
+        height: element.scrollHeight,
+
+      scrollX: 0,
+      scrollY: -window.scrollY,
+
+
       onclone: (clonedDoc) => {
         const clonedElement = clonedDoc.getElementById('inspection-form');
         if (clonedElement) {
