@@ -97,7 +97,7 @@ export function ChemicalCabinetForm({
       </div>
 
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center py-2 rounded-lg mb-6 font-bold text-xl tracking-wide shadow-sm">
-        ARMOIRE CHIMIQUE
+        ARMOIRE CHIMIQUE-1
       </div>
 
       <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1 px-3 rounded-md mb-4 text-sm font-semibold">
