@@ -23,33 +23,36 @@ interface ChemicalCabinetFormProps {
 }
 
 const getStatusDisplay = (status: string) => {
+  const base = "inline-flex items-center gap-2 whitespace-nowrap text-xs font-semibold leading-none";
+  const iconCls = "w-4 h-4 flex-shrink-0";
+
   switch (status) {
     case 'conforme':
       return (
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-green-500" />
-          <span className="text-sm text-green-700 font-medium">Conforme</span>
+        <div className={base}>
+          <CheckCircle2 className={`${iconCls} text-green-500`} />
+          <span className="text-green-700">Conforme</span>
         </div>
       );
     case 'sous-reserve':
       return (
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-amber-500" />
-          <span className="text-sm text-amber-700 font-medium">Sous Réserve</span>
+        <div className={base}>
+          <AlertTriangle className={`${iconCls} text-amber-500`} />
+          <span className="text-amber-700">Sous Réserve</span>
         </div>
       );
     case 'non-conforme':
       return (
-        <div className="flex items-center gap-2">
-          <XCircle className="w-5 h-5 text-red-500" />
-          <span className="text-sm text-red-700 font-medium">Non Conforme</span>
+        <div className={base}>
+          <XCircle className={`${iconCls} text-red-500`} />
+          <span className="text-red-700">Non Conforme</span>
         </div>
       );
     default:
       return (
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-gray-300" />
-          <span className="text-sm text-gray-400 font-medium">Non Evalué</span>
+        <div className={`${base} text-gray-400`}>
+          <CheckCircle2 className={`${iconCls} text-gray-300`} />
+          <span>Non Évalué</span>
         </div>
       );
   }
@@ -184,7 +187,7 @@ export function ChemicalCabinetForm({
         <thead>
           <tr className="bg-gray-100">
             <th className="p-2 text-left font-bold text-gray-700 border text-sm">Evaluation état de l'appareillage</th>
-            <th className="p-2 w-32 font-bold text-gray-700 border text-center text-sm">Conformité</th>
+            <th className="p-2 w-40 font-bold text-gray-700 border text-center text-sm">Conformité</th>
           </tr>
         </thead>
 
@@ -228,7 +231,7 @@ export function ChemicalCabinetForm({
                         </div>
                       </div>
 
-                      <div className="w-32 p-2 border-l flex justify-center">
+                     <div className="w-44 p-2 border-l flex items-center justify-center h-[44px]">
                         {getStatusDisplay(inspectionStatus[item.key])}
                       </div>
                     </div>
@@ -250,7 +253,7 @@ export function ChemicalCabinetForm({
                   {structuralItems.map((item) => (
                     <div key={item.key} className="flex border-b last:border-b-0">
                       <div className="flex-1 p-2 pl-4 text-sm">{item.label}</div>
-                      <div className="w-32 p-2 border-l flex justify-center">
+                      <div className="w-44 p-2 border-l flex items-center justify-center h-[44px]">
                         {getStatusDisplay(inspectionStatus[item.key])}
                       </div>
                     </div>
@@ -288,7 +291,7 @@ export function ChemicalCabinetForm({
                       </div>
                     </div>
 
-                    <div className="w-32 p-2 border-l flex justify-center">
+                    <div className="w-44 p-2 border-l flex items-center justify-center h-[44px]">
                       {getStatusDisplay(inspectionStatus['depression'])}
                     </div>
                   </div>
