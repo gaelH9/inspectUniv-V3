@@ -559,7 +559,7 @@ const finalHeight = imgHeight * ratio;
 
 // ✅ centrage dans la zone imprimable à droite de la barre bleue
 const x = sideWidth + marginLeft + (availableWidth - finalWidth) / 2;
-const y = marginTop + (availableHeight - finalHeight) / 2;
+const y = marginTop; // ✅ aligné en haut
 
 pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
 
