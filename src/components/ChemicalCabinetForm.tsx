@@ -6,6 +6,12 @@ import logo from "../assets/images/logo.png";
 import sig1 from "../assets/images/sig1.png";
 import sig2 from "../assets/images/sig2.png";
 
+/** ✅ Variable de contrôle (true = visible, false = caché) */
+const SHOW_EXTRACTEUR_DEBIT_INFO = false;
+
+/** ✅ Valeur par défaut PSI */
+const DEFAULT_PSI_VALUE = "-1.0";
+
 interface ChemicalCabinetFormProps {
   selectedCabinet: Cabinet;
   customIdentification: string;
@@ -73,13 +79,17 @@ export function ChemicalCabinetForm({
   handleImageUpload,
   handleCameraCapture
 }: ChemicalCabinetFormProps) {
-  const [psiValue, setPsiValue] = useState<string>('');
+  /** ✅ PSI par défaut à -1.0 */
+  const [psiValue, setPsiValue] = useState<string>(DEFAULT_PSI_VALUE);
+
   const [debitValue, setDebitValue] = useState<string>('');
   const [debitUnit, setDebitUnit] = useState<string>('m³/h');
 
   useEffect(() => {
     if (!croppedImage && remarks === '') {
-      setPsiValue('');
+      /** ✅ reset PSI => -1.0 (pas vide) */
+      setPsiValue(DEFAULT_PSI_VALUE);
+
       setDebitValue('');
       setDebitUnit('m³/h');
     }
@@ -207,7 +217,8 @@ export function ChemicalCabinetForm({
                         <div className="flex items-center justify-between gap-3">
                           <span className="text-sm">{item.label}</span>
 
-                          {item.key === 'extracteur' && (
+                          {/* ✅ Affichage conditionnel du débit Extracteur */}
+                          {item.key === 'extracteur' && SHOW_EXTRACTEUR_DEBIT_INFO && (
                             <div className="flex items-center gap-2 text-[11px] text-gray-600">
                               <span className="font-medium">Information débit:</span>
                               <input
@@ -231,7 +242,7 @@ export function ChemicalCabinetForm({
                         </div>
                       </div>
 
-                     <div className="w-44 p-2 border-l flex items-center justify-center h-[44px]">
+                      <div className="w-44 p-2 border-l flex items-center justify-center h-[44px]">
                         {getStatusDisplay(inspectionStatus[item.key])}
                       </div>
                     </div>
@@ -285,7 +296,7 @@ export function ChemicalCabinetForm({
                             value={psiValue}
                             onChange={(e) => setPsiValue(e.target.value)}
                             className="w-16 px-2 py-1 border rounded text-center text-[11px]"
-                            placeholder="0.00"
+                            placeholder="-1.0"
                           />
                         </div>
                       </div>
