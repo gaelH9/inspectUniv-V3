@@ -381,7 +381,9 @@ export default function App() {
     useCORS: true,
     allowTaint: true,
     logging: false,
-    imageTimeout: 15000,
+    imageTimeout: 0,
+    removeContainer: true,
+    foreignObjectRendering: true,
 
     // ✅ Capture totale du contenu (pas juste la zone visible)
     width: element.scrollWidth,
