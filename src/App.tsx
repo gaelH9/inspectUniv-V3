@@ -669,7 +669,7 @@ pdf.text(
                   className="w-full flex items-center justify-between gap-2 px-2 sm:px-3 py-1.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border"
                 >
                   <span className="text-xs sm:text-sm truncate">
-                    {`${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedCabinet.type} - ${selectedCabinet.identification}`}
+                    {`${selectedCabinet.establishment} - ${selectedCabinet.room} - ${selectedCabinet.type} - ${selectedCabinet.identification} - ${selectedCabinet.reference}`}
                   </span>
                   <ChevronDown size={16} className="text-gray-600 flex-shrink-0" />
                 </button>
@@ -687,7 +687,7 @@ pdf.text(
                             isProcessed ? 'bg-green-100 hover:bg-green-200' : ''
                           }`}
                         >
-                          {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification}`}
+                          {`${cabinet.establishment} - ${cabinet.room} - ${cabinet.type} - ${cabinet.identification} - ${cabinet.reference}`}
                         </button>
                       );
                     })}
