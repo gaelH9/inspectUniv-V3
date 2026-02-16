@@ -11,7 +11,7 @@ const SHOW_EXTRACTEUR_DEBIT_INFO = false;
 
 /** ✅ Valeur par défaut PSI */
 const DEFAULT_PSI_VALUE = "-1.0";
-const SHOW_PSI_FIELD = false; // afficher PSI
+const SHOW_PSI_FIELD = true; // afficher PSI
 const DEFAULT_PSI_VALUE = "-1.0"; // PSI par défaut
 
 interface ChemicalCabinetFormProps {
