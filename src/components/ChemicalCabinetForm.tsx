@@ -289,7 +289,15 @@ export function ChemicalCabinetForm({
                         <span className="text-sm">Mise en dépression de l'enceinte</span>
 
                         <div className="flex items-center gap-2 text-[11px] text-gray-600">
-                         
+                          <span className="font-medium">PSI:</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={psiValue}
+                            onChange={(e) => setPsiValue(e.target.value)}
+                            className="w-16 px-2 py-1 border rounded text-center text-[11px]"
+                            placeholder="0.00"
+                          />
                         </div>
                       </div>
                     </div>
