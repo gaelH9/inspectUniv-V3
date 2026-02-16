@@ -11,8 +11,6 @@ const SHOW_EXTRACTEUR_DEBIT_INFO = false;
 
 /** ✅ Valeur par défaut PSI */
 const DEFAULT_PSI_VALUE = "-1.0";
-const SHOW_PSI_FIELD = true; // afficher PSI
-const DEFAULT_PSI_VALUE = "-1.0"; // PSI par défaut
 
 interface ChemicalCabinetFormProps {
   selectedCabinet: Cabinet;
@@ -290,18 +288,10 @@ export function ChemicalCabinetForm({
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm">Mise en dépression de l'enceinte</span>
 
-                       {SHOW_PSI_FIELD && (
-                      <div className="flex gap-2 text-xs">
-                        <span>PSI:</span>
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={psiValue}
-                          onChange={(e)=>setPsiValue(e.target.value)}
-                          className="w-16 border text-center"
-                        />
+                        <div className="flex items-center gap-2 text-[11px] text-gray-600">
+                         
+                        </div>
                       </div>
-                    )}
                     </div>
 
                     <div className="w-44 p-2 border-l flex items-center justify-center h-[44px]">
