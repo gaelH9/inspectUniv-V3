@@ -58,7 +58,7 @@ const remarksData = {
     { key: "Maintenance", "text": "Maintenance préventive recommandée pour éviter une détérioration future." }
   ],
   armoire: [
-    { key: 'PressionPSI OK', text: 'Dépression de l’enceinte mesurée ; \nConfirmant le fonctionnement extractif et le maintien du confinement conformément au principe de sécurité des armoires chimiques ventilées. \n Valeur cohérente avec les caractéristiques constructeur. ' },
+    { key: 'PressionPSI OK', text: 'Dépression de l’enceinte mesurée; \nConfirmant le fonctionnement extractif et le maintien du confinement conformément au principe de sécurité des armoires chimiques ventilées. \nValeur cohérente avec les caractéristiques constructeur. ' },
      { key: 'PressionPSI ERROR', text: 'La pression interne de l’armoire chimique a été mesurée afin d’attester de sa dépression opérationnelle.\n Celle ci n\'est pas en dépression ! Extraction défectueuse.' },
     { key: 'info2', text: 'Aucune valeur minimale normative n’est définie pour la requalification des armoires chimiques ventilées.' },
     { key: "New ID", "text": "Nouvel identifiant attribué. Une étiquette sera apposée sur l'appareil." },
