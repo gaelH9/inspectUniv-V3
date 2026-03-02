@@ -1333,8 +1333,11 @@ export const cabinets: Cabinet[] = [
   // UFR SANTÉ ARMOIRE - HORS BAT SCIENCE 
    { establishment: "UFR Santé", identification: "", room: "C004", reference: "15431", type: "Armoire Chimique" },
    { establishment: "UFR Santé", identification: "", room: "C004", reference: "15384", type: "Armoire Chimique" },
-
   
+  //HOTTES des cliniques 
+   { establishment: "CHOR", identification: "PSM CYTO", room: "", reference: "130", type: "PSM" },
+   { establishment: "CHOR", identification: "Sériel Numbere:128", room: "", reference: "128", type: "PSM" },
+   { establishment: "CHOR", identification: "Sériel Numbere:123", room: "", reference: "123", type: "PSM" },
 
 
 
