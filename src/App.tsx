@@ -534,8 +534,8 @@ pdf.rect(sideWidth - 2, 0, 2, pdfHeight, 'F');
 
 pdf.setTextColor(255, 255, 255);
 pdf.setFontSize(10);
-pdf.text(
-  selectedCabinet.type.toUpperCase(),
+pdf.text(9
+  //selectedCabinet.type.toUpperCase(),
   sideWidth / 2 + 1,
   pdfHeight / 2,
   { angle: 90, align: 'center' }
