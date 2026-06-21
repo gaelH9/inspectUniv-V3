@@ -116,7 +116,7 @@ export function HotteForm({
       </div>
 
       <div className="bg-gradient-to-r from-orange-600 to-orange-700 text-white text-center py-2 rounded-lg mb-4 font-bold text-xl tracking-wide shadow-sm">
-       HOTTE
+       PSM - TYPE I
       </div>
 
       <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white text-center py-1.5 rounded-lg mb-4 font-medium tracking-wide shadow-sm text-sm">
