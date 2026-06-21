@@ -1335,9 +1335,9 @@ export const cabinets: Cabinet[] = [
    { establishment: "UFR Santé", identification: "", room: "C004", reference: "15384", type: "Armoire Chimique" },
   
   //HOTTES des cliniques 
-   { establishment: "CHOR", identification: "PSM CYTO", room: "Zone Labo", reference: "130", type: "Hotte" },
-   { establishment: "CHOR", identification: "Sériel Numbere:128", room: "Zone Labo", reference: "128", type: "Hotte" },
-   { establishment: "CHOR", identification: "Sériel Numbere:123", room: "Zone Labo", reference: "123", type: "Hotte" },
+   { establishment: "CHOR", identification: "SN:130", room: "Zone Labo", reference: "130", type: "Hotte" },
+   { establishment: "CHOR", identification: "SN:128", room: "Zone Labo", reference: "128", type: "Hotte" },
+   { establishment: "CHOR", identification: "SN:123", room: "Zone Labo", reference: "123", type: "Hotte" },
    { establishment: "CHOR", identification: "Labopur", room: "Zone Bloc Opératoire", reference: "Labopur", type: "Hotte" },
 
 
